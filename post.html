@@ -139,7 +139,7 @@
                 </article>
 
                 <div class="mt-12 pt-6 border-t border-[var(--border-primary)]">
-                    <a href="https://baqerghezi.github.io/blog.html" class="text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline transition-colors duration-200">← Back to Blog List</a>
+                    <a href="/blog.html" class="text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline transition-colors duration-200">← Back to Blog List</a>
                 </div>
 
                 <footer class="text-center mt-16 pt-8 border-t border-[var(--border-primary)]">
@@ -157,13 +157,13 @@
             const inactiveClasses = "hover:text-[var(--accent-primary)] hover:bg-[var(--border-primary)]/20";
             const navHTML = `
                 <div class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-                    <a href="https://baqerghezi.github.io/index.html" class="text-2xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors">
+                    <a href="/index.html" class="text-2xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors">
                         M. A. Alghezi
                     </a>
                     <div class="flex items-center space-x-2 sm:space-x-4">
-                        <a href="https://baqerghezi.github.io/index.html" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'home' ? activeClasses : inactiveClasses}">Home</a>
-                        <a href="https://baqerghezi.github.io/blog.html" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'blog' ? activeClasses : inactiveClasses}">Blog</a>
-                        <a href="https://baqerghezi.github.io/mbgcv.html" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'cv' ? activeClasses : inactiveClasses}">CV</a>
+                        <a href="/index.html" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'home' ? activeClasses : inactiveClasses}">Home</a>
+                        <a href="/blog.html" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'blog' ? activeClasses : inactiveClasses}">Blog</a>
+                        <a href="/mbgcv.html" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'cv' ? activeClasses : inactiveClasses}">CV</a>
                         <button id="theme-toggle" type="button" class="p-2 rounded-lg text-[var(--text-primary)] hover:bg-[var(--border-primary)]/30 focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] transition-colors">
                             <svg id="theme-toggle-dark-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21c3.978 0 7.44-2.03 9.002-5.002Z" /></svg>
                             <svg id="theme-toggle-light-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-6.364-.386 1.591-1.591M3 12h2.25m.386-6.364 1.591 1.591" /></svg>
