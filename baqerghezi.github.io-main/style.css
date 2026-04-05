@@ -1,0 +1,242 @@
+/* ===============================
+   Global Base Styles
+   ===============================*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  /* Base text color and background are applied directly or via Tailwind utility classes */
+}
+
+/* -------------------------------
+   Design‑token colour palette
+   -------------------------------*/
+:root {
+  --old-paper: #fffaf0;    /* Floral White */
+  --dark-ink: #654321;     /* Dark Brown   */
+  --soft-brown: #d2b48c;   /* Tan          */
+  --accent: #a0522d;       /* Sienna       */
+  --accent-dark: #8B4513;  /* Saddle Brown */
+  --soft-brown-transparent-bg: rgba(210, 180, 140, 0.2); /* For scrollbar track */
+}
+
+/* Utility classes mapped to tokens */
+.bg-old-paper { background-color: var(--old-paper); }
+.text-dark-ink { color: var(--dark-ink); }
+.border-soft-brown { border-color: var(--soft-brown); }
+
+.text-accent { color: var(--accent); }
+.hover\:text-accent-dark:hover { color: var(--accent-dark); }
+/* Fallback for rare non‑hover misuse */
+.hover\:text-accent-dark { color: var(--accent-dark); }
+
+.bg-accent { background-color: var(--accent); }
+.hover\:bg-accent-dark:hover { background-color: var(--accent-dark); }
+.hover\:bg-accent-dark { background-color: var(--accent-dark); }
+
+/* ===============================
+   Layout / Components
+   ===============================*/
+/* Sidebar links */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem; /* mb-3 */
+  text-decoration: none;
+  width: 100%;
+}
+
+/* Blog posts listing & publication cards (for index/blog pages) */
+.blog-post-entry,
+.publication-entry {
+  margin-bottom: 2.5rem;  /* mb-10 */
+  padding-bottom: 1.5rem; /* pb-6 */
+  border-bottom: 1px dashed var(--soft-brown);
+}
+
+.blog-post-entry:last-child,
+.publication-entry:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.blog-post-title { /* For blog listing page */
+  font-weight: 700;
+  font-size: 1.5rem; /* text-2xl */
+  margin-bottom: 0.5rem;
+}
+
+.blog-post-meta { /* For blog listing page */
+  font-size: 0.85rem;
+  color: var(--accent-dark);
+  margin-bottom: 0.75rem;
+}
+
+.blog-post-snippet { /* For blog listing page */
+  margin-bottom: 1rem;
+}
+
+.publication-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.publication-authors {
+  font-style: italic;
+  margin-bottom: 0.25rem;
+  color: var(--accent-dark);
+}
+
+.publication-venue {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Navigation bar */
+.top-nav {
+  background-color: rgba(255, 250, 240, 0.8);
+  backdrop-filter: blur(5px);
+  border-bottom: 1px solid var(--soft-brown);
+}
+
+.top-nav-link {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease-in-out;
+  color: var(--accent);
+}
+
+.top-nav-link:hover {
+  color: var(--accent-dark);
+}
+
+.logo-text {
+  font-weight: 900;
+  font-size: 1.25rem; /* text-xl */
+  letter-spacing: -0.025em;
+}
+
+/* Pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--soft-brown);
+  flex-wrap: wrap;
+}
+
+.pagination-link,
+.pagination-ellipsis {
+  margin: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  color: var(--accent);
+  text-decoration: none;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  font-size: 0.9rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pagination-link:hover {
+  background-color: var(--soft-brown-transparent-bg);
+  border-color: var(--soft-brown);
+  color: var(--accent-dark);
+}
+
+.pagination-link.active {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: var(--old-paper);
+  font-weight: 700;
+  cursor: default;
+}
+
+.pagination-link.disabled {
+  color: var(--soft-brown);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pagination-link.disabled:hover {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.pagination-ellipsis {
+  cursor: default;
+  padding: 0.5rem 0.25rem;
+}
+
+/* ===============================
+   Blog Post Specific Styles (Individual Post Page)
+   ===============================*/
+/* Post Meta Information (Author, Date) for individual post page */
+.post-meta { /* Renamed from canvas to match blog listing page style if desired, or keep separate if styling differs */
+  color: var(--accent-dark);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Styles for scrollable MathJax display equations */
+mjx-container[jax="CHTML"][display="true"],
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 0.5em 0; /* Add some vertical padding around scrollable math */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Optional: Style the scrollbar for MathJax containers */
+mjx-container[jax="CHTML"][display="true"]::-webkit-scrollbar,
+mjx-container[jax="SVG"][display="true"]::-webkit-scrollbar {
+  height: 8px;
+}
+mjx-container[jax="CHTML"][display="true"]::-webkit-scrollbar-track,
+mjx-container[jax="SVG"][display="true"]::-webkit-scrollbar-track {
+  background: var(--soft-brown-transparent-bg);
+  border-radius: 4px;
+}
+mjx-container[jax="CHTML"][display="true"]::-webkit-scrollbar-thumb,
+mjx-container[jax="SVG"][display="true"]::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+mjx-container[jax="CHTML"][display="true"]::-webkit-scrollbar-thumb:hover,
+mjx-container[jax="SVG"][display="true"]::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dark);
+}
+
+
+/* ===============================
+   Accessibility helpers
+   ===============================*/
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: -999px;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  background: var(--accent);
+  color: var(--old-paper);
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  z-index: 100;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
