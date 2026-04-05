@@ -73,7 +73,13 @@
                 <label class="block font-bold mb-1">Snippet</label>
                 <textarea id="post-snippet" class="input-style h-20" placeholder="A short description..."></textarea>
                 
-                <label class="block font-bold mb-1">Content (Markdown + LaTeX)</label>
+                <div class="flex justify-between items-end mb-1">
+                    <label class="block font-bold">Content (Markdown + LaTeX)</label>
+                    <div class="space-x-1">
+                        <button type="button" onclick="insertMarkdown('image')" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700">📷 Add Image/GIF</button>
+                        <button type="button" onclick="insertMarkdown('youtube')" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700">🎥 Add YouTube</button>
+                    </div>
+                </div>
                 <textarea id="post-content" class="input-style h-64 font-mono text-sm" placeholder="Write markdown here..."></textarea>
                 
                 <div class="flex space-x-2">
@@ -225,6 +231,37 @@
             document.getElementById('post-form-title').innerText = 'Create New Post';
             document.getElementById('post-form-container').classList.remove('hidden');
             document.getElementById('post-msg').innerText = '';
+        }
+
+        function insertMarkdown(type) {
+            const textarea = document.getElementById('post-content');
+            const startPos = textarea.selectionStart;
+            const endPos = textarea.selectionEnd;
+            let textToInsert = '';
+
+            if (type === 'image') {
+                const url = prompt("Enter the URL of the image or GIF:");
+                if (!url) return;
+                const alt = prompt("Enter a description (alt text) for the image:") || "Image";
+                textToInsert = `\n![${alt}](${url})\n`;
+            } else if (type === 'youtube') {
+                let url = prompt("Enter the YouTube Video URL:");
+                if (!url) return;
+                // Extract video ID safely
+                let videoId = '';
+                try {
+                    if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
+                    else if (url.includes('v=')) videoId = url.split('v=')[1].split('&')[0];
+                    else videoId = url; // fall back to raw ID
+                } catch(e) { videoId = url; }
+                
+                textToInsert = `\n<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>\n`;
+            }
+
+            textarea.value = textarea.value.substring(0, startPos) + textToInsert + textarea.value.substring(endPos, textarea.value.length);
+            textarea.focus();
+            const newPos = startPos + textToInsert.length;
+            textarea.setSelectionRange(newPos, newPos);
         }
 
         function closePostForm() {

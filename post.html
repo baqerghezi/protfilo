@@ -117,6 +117,10 @@
         .prose ol > li::before { color: var(--prose-counters); }
 
         .prose mjx-container[display="true"] { margin-top: 1.5em; margin-bottom: 1.5em; }
+
+        /* Ensure images, GIFs, and YouTube embeds are responsive */
+        .prose img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 1.5rem auto; display: block; }
+        .prose iframe { width: 100%; aspect-ratio: 16 / 9; border-radius: 0.5rem; margin: 1.5rem 0; box-shadow: 0 4px 6px -1px var(--shadow-color); }
     </style>
 </head>
 <body class="font-inter leading-relaxed">
