@@ -86,10 +86,43 @@
 
         <!-- 2. CV Tab -->
         <div id="tab-cv" class="tab-content">
-            <h3 class="text-xl font-bold mb-4">Edit CV Content (Markdown/HTML)</h3>
-            <textarea id="cv-content" class="input-style h-96 font-mono text-sm" placeholder="Write your CV here..."></textarea>
-            <button onclick="savePage('cv')" class="btn-style w-full">Save CV</button>
-            <p id="msg-cv" class="mt-2 font-bold text-center"></p>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Edit CV (Structured Builder)</h3>
+                <button onclick="saveCvJson()" class="btn-style bg-green-600 hover:bg-green-700">Save CV to live site</button>
+            </div>
+            <p id="msg-cv" class="font-bold text-center text-green-600 mb-4"></p>
+
+            <div class="bg-gray-50 border border-gray-200 p-6 rounded-lg mb-6">
+                <h4 class="text-lg font-bold text-gray-700 mb-3 border-b pb-2">1. Header & Contact Info</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">Full Name</label><input id="cv-name" class="input-style" placeholder="e.g. John Doe"></div>
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">Phone</label><input id="cv-phone" class="input-style" placeholder="(123) 456-7890"></div>
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">Email</label><input id="cv-email" class="input-style" placeholder="email@example.com"></div>
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">Location</label><input id="cv-location" class="input-style" placeholder="City, State"></div>
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">LinkedIn URL</label><input id="cv-linkedin" class="input-style" placeholder="linkedin.com/in/username"></div>
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">PDF Resume Link</label><input id="cv-pdf" class="input-style" placeholder="resume.pdf"></div>
+                </div>
+
+                <h4 class="text-lg font-bold text-gray-700 mt-6 mb-3 border-b pb-2">2. Professional Summary</h4>
+                <textarea id="cv-summary" class="input-style h-24" placeholder="A brief summary of your qualifications..."></textarea>
+
+                <h4 class="text-lg font-bold text-gray-700 mt-6 mb-3 border-b pb-2">3. Skills (Tags)</h4>
+                <label class="block font-bold text-xs uppercase text-gray-500 mb-1">Comma separated</label>
+                <input id="cv-skills" class="input-style" placeholder="Python, JavaScript, Machine Learning, Data Analysis">
+            </div>
+
+            <div class="bg-gray-50 border border-gray-200 p-6 rounded-lg">
+                <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h4 class="text-lg font-bold text-gray-700">4. Sections (Education, Experience, Projects)</h4>
+                    <button onclick="addCvSection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-bold py-1 px-3 rounded">+ Add New Section</button>
+                </div>
+                
+                <div id="cv-sections-container" class="space-y-6"></div>
+            </div>
+            
+            <div class="mt-6 text-right">
+                <button onclick="saveCvJson()" class="btn-style bg-green-600 hover:bg-green-700 text-lg px-8 py-3 w-full">💾 Save Full CV to Database</button>
+            </div>
         </div>
 
         <!-- 3. Projects Tab -->
@@ -271,7 +304,17 @@
                 const res = await fetch('/api/pages/' + slug);
                 if (res.ok) {
                     const data = await res.json();
-                    document.getElementById(slug + '-content').value = data.content || '';
+                    if (slug === 'cv') {
+                        try {
+                           let cv = JSON.parse(data.content);
+                           populateCvBuilder(cv);
+                        } catch(e) {
+                           // Legacy or empty
+                           populateCvBuilder(emptyCvData());
+                        }
+                    } else {
+                        document.getElementById(slug + '-content').value = data.content || '';
+                    }
                 }
             } catch(e) {
                 console.error("Error loading specific page content", e);
@@ -299,6 +342,121 @@
             } else {
                 msgEl.textContent = 'Error saving page.';
                 msgEl.className = 'mt-2 font-bold text-red-600';
+            }
+        }
+
+        // --- CV GUI Builder Logic ---
+        function emptyCvData() {
+            return {
+                contact: { name: '', phone: '', email: '', location: '', linkedin: '', pdfLink: '' },
+                summary: '',
+                skills: '',
+                sections: []
+            };
+        }
+
+        let currentCvData = emptyCvData();
+
+        function populateCvBuilder(data) {
+            currentCvData = data;
+            document.getElementById('cv-name').value = data.contact?.name || '';
+            document.getElementById('cv-phone').value = data.contact?.phone || '';
+            document.getElementById('cv-email').value = data.contact?.email || '';
+            document.getElementById('cv-location').value = data.contact?.location || '';
+            document.getElementById('cv-linkedin').value = data.contact?.linkedin || '';
+            document.getElementById('cv-pdf').value = data.contact?.pdfLink || '';
+            document.getElementById('cv-summary').value = data.summary || '';
+            document.getElementById('cv-skills').value = data.skills || '';
+            renderCvSections();
+        }
+
+        function renderCvSections() {
+            const container = document.getElementById('cv-sections-container');
+            container.innerHTML = '';
+            currentCvData.sections.forEach((sec, sIdx) => {
+                let itemsHtml = '';
+                sec.items.forEach((item, iIdx) => {
+                    itemsHtml += `
+                        <div class="bg-white p-4 border border-gray-300 rounded mb-3 shadow-sm">
+                            <div class="flex justify-between mb-2">
+                                <h6 class="font-bold text-sm text-gray-600 uppercase tracking-wider">Item ${iIdx + 1}</h6>
+                                <button onclick="deleteCvItem(${sIdx}, ${iIdx})" class="text-red-500 text-xs font-bold hover:underline">Remove Item</button>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                                <input type="text" placeholder="Title (e.g. Researcher)" class="input-style mb-0 text-sm" value="${item.title}" onchange="currentCvData.sections[${sIdx}].items[${iIdx}].title=this.value">
+                                <input type="text" placeholder="Subtitle (e.g. University / Company)" class="input-style mb-0 text-sm" value="${item.subtitle}" onchange="currentCvData.sections[${sIdx}].items[${iIdx}].subtitle=this.value">
+                                <input type="text" placeholder="Date (e.g. Jan 2023 - Dec 2023)" class="input-style mb-0 sm:col-span-2 text-sm" value="${item.date}" onchange="currentCvData.sections[${sIdx}].items[${iIdx}].date=this.value">
+                            </div>
+                            <label class="block font-bold text-xs uppercase text-gray-500 mb-1">Bullet Points (One per line)</label>
+                            <textarea class="input-style h-20 mb-0 text-sm" placeholder="- Did something cool\n- Improved efficiency by 40%" onchange="currentCvData.sections[${sIdx}].items[${iIdx}].bullets=this.value.split('\\n')">${(item.bullets || []).join('\n')}</textarea>
+                        </div>
+                    `;
+                });
+
+                container.insertAdjacentHTML('beforeend', `
+                    <div class="bg-gray-100 p-5 rounded-lg border border-gray-300 border-l-4 border-l-[#C08261]">
+                        <div class="flex justify-between items-center mb-3">
+                            <input type="text" placeholder="Section Title (e.g. Education, Experience)" class="input-style mb-0 font-bold text-lg w-2/3" value="${sec.title}" onchange="currentCvData.sections[${sIdx}].title=this.value">
+                            <button onclick="deleteCvSection(${sIdx})" class="text-red-600 font-bold text-sm hover:underline">Delete Section</button>
+                        </div>
+                        <div class="pl-4 border-l-2 border-gray-200">
+                            ${itemsHtml}
+                            <button onclick="addCvItem(${sIdx})" class="text-[#C08261] font-bold text-sm hover:underline">+ Add Entry to this Section</button>
+                        </div>
+                    </div>
+                `);
+            });
+        }
+
+        function addCvSection() {
+            currentCvData.sections.push({ title: '', items: [] });
+            renderCvSections();
+        }
+        function deleteCvSection(sIdx) {
+            if(confirm('Delete entire section?')) { currentCvData.sections.splice(sIdx, 1); renderCvSections(); }
+        }
+        function addCvItem(sIdx) {
+            currentCvData.sections[sIdx].items.push({ title: '', subtitle: '', date: '', bullets: [] });
+            renderCvSections();
+        }
+        function deleteCvItem(sIdx, iIdx) {
+            if(confirm('Delete item?')) { currentCvData.sections[sIdx].items.splice(iIdx, 1); renderCvSections(); }
+        }
+
+        async function saveCvJson() {
+            const pwd = localStorage.getItem('adminPwd');
+            const msgEl = document.getElementById('msg-cv');
+            msgEl.textContent = 'Saving CV...';
+
+            currentCvData.contact = {
+                name: document.getElementById('cv-name').value,
+                phone: document.getElementById('cv-phone').value,
+                email: document.getElementById('cv-email').value,
+                location: document.getElementById('cv-location').value,
+                linkedin: document.getElementById('cv-linkedin').value,
+                pdfLink: document.getElementById('cv-pdf').value
+            };
+            currentCvData.summary = document.getElementById('cv-summary').value;
+            currentCvData.skills = document.getElementById('cv-skills').value;
+
+            // Save active textareas to the state object to ensure we don't lose unfocused changes
+            renderCvSections(); // We don't necessarily need to render, but the onchange already covers changes if they blur.
+            // Using blur dispatch isn't needed since we use real-time bindings in standard frameworks, but for vanilla JS, `onchange` fires on blur.
+
+            const content = JSON.stringify(currentCvData);
+
+            const res = await fetch('/api/pages/cv', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Password': pwd },
+                body: JSON.stringify({ content })
+            });
+
+            if (res.ok) {
+                msgEl.textContent = 'CV Saved Successfully! Live site updated.';
+                setTimeout(() => { msgEl.textContent = ''; }, 3000);
+            } else {
+                msgEl.textContent = 'Error saving CV.';
+                msgEl.className = 'font-bold text-center text-red-600 mb-4';
             }
         }
     </script>

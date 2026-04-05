@@ -129,8 +129,10 @@
 
     <div class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-8 md:pt-12 pb-16">
         <main class="w-full">
-            <div id="cv-content-container" class="prose max-w-none bg-[var(--bg-secondary)] border border-[var(--border-primary)] shadow-lg p-6 rounded-xl text-[var(--text-primary)]">
-                Loading CV...
+            <div id="cv-content-container">
+                <div class="text-center p-8 bg-white border border-gray-200 shadow rounded text-gray-500">
+                    Loading CV...
+                </div>
             </div>
 
             <footer class="text-center mt-16 pt-8 border-t border-[var(--border-primary)]">
@@ -211,23 +213,83 @@
             }
 
             // Fetch dynamic content
-            async function fetchPageContent(slug, containerId) {
+            async function fetchPageContent() {
                 try {
-                    const res = await fetch('/api/pages/' + slug);
+                    const res = await fetch('/api/pages/cv');
                     if (res.ok) {
                         const data = await res.json();
-                        if (typeof marked !== 'undefined' && data.content) {
-                            document.getElementById(containerId).innerHTML = marked.parse(data.content);
+                        if (data.content && data.content.startsWith('{')) {
+                            const d = JSON.parse(data.content);
+                            let html = '';
+
+                            // Header Info
+                            html += `
+                            <section id="cv-header" class="mb-8 text-center">
+                                <h1 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-2">${d.contact?.name || ''}</h1>
+                                <p class="text-md text-[var(--text-secondary)] mb-1">${d.contact?.phone || ''} | <a href="mailto:${d.contact?.email || ''}" class="text-[var(--accent-primary)] hover:underline">${d.contact?.email || ''}</a> | 
+                                    <svg class="location-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.145l.002-.001L10.303 18.72a5.741 5.741 0 00.282-.145l.002-.001.006-.003.018-.008.028-.014a6.018 6.018 0 00.31-.168c.003-.002.005-.003.007-.005l.028-.014c.003-.002.005-.003.008-.005.09-.048.18-.098.267-.152l.004-.002a6.032 6.032 0 00.22-.15l.004-.002.002-.001.002-.002.002-.001a5.99 5.99 0 00.199-.152c.002-.002.004-.003.005-.005A5.986 5.986 0 0012 17.5c0-.999-.224-1.93-.622-2.765A5.982 5.982 0 0010 14c-.999 0-1.93.224-2.765.622A5.983 5.983 0 005.613 17.5c0 .999.224 1.93.622 2.765.002.003.004.004.005.006a5.99 5.99 0 00.199.152l.002.001.002.002.002.001.004.002a6.031 6.031 0 00.22.15l.004.002c.087.054.177.104.267.152.003.002.005.003.008.005l.028.014a6.018 6.018 0 00.31.168l.028.014a5.741 5.741 0 00.281.145l.018.008.006.003zM10 16.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" clip-rule="evenodd" /><path d="M10 18C6.13401 18 3 14.866 3 11C3 7.13401 6.13401 4 10 4C13.866 4 17 7.13401 17 11C17 14.866 13.866 18 10 18ZM10 11.75C10.4142 11.75 10.75 11.4142 10.75 11C10.75 10.5858 10.4142 10.25 10 10.25C9.58579 10.25 9.25 10.5858 9.25 11C9.25 11.4142 9.58579 11.75 10 11.75Z" /></svg>
+                                    ${d.contact?.location || ''}
+                                </p>
+                                ${d.contact?.linkedin ? `<p class="text-md text-[var(--text-secondary)] mb-4"><a href="https://${d.contact.linkedin.replace('https://','')}" target="_blank" rel="noopener noreferrer" class="text-[var(--accent-primary)] hover:underline">${d.contact.linkedin}</a></p>` : ''}
+                                ${d.contact?.pdfLink ? `<a href="${d.contact.pdfLink}" target="_blank" rel="noopener noreferrer" class="inline-block bg-[var(--accent-primary)] text-white font-bold py-2.5 px-6 rounded-lg transition hover:bg-[var(--accent-primary-hover)] shadow hover:shadow-md text-sm md:text-base">Read PDF</a>` : ''}
+                            </section>
+                            `;
+
+                            // Summary
+                            if (d.summary) {
+                                html += `
+                                <section id="cv-summary" class="content-card">
+                                    <p class="text-lg text-[var(--text-secondary)]">${d.summary.replace(/\\n/g, '<br>')}</p>
+                                </section>
+                                `;
+                            }
+
+                            // Dynamic Sections
+                            (d.sections || []).forEach(sec => {
+                                html += `
+                                <section class="content-card">
+                                    <h2 class="cv-section-title">${sec.title}</h2>
+                                    ${(sec.items || []).map(item => `
+                                    <div class="mb-6">
+                                        <h3 class="cv-item-title">${item.title}</h3>
+                                        <p class="cv-item-subtitle">${item.subtitle}</p>
+                                        <p class="cv-item-date">${item.date}</p>
+                                        <ul class="list-disc cv-item-details">
+                                            ${(item.bullets || []).filter(b=>b.trim()).map(b => `<li>${b}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                    `).join('')}
+                                </section>
+                                `;
+                            });
+
+                            // Skills
+                            if (d.skills) {
+                                html += `
+                                <section id="skills" class="content-card">
+                                    <h2 class="cv-section-title">Skills</h2>
+                                    <div class="cv-skills-list">
+                                        ${d.skills.split(',').map(s => `<span class="cv-skill-tag">${s.trim()}</span>`).join('')}
+                                    </div>
+                                </section>
+                                `;
+                            }
+
+                            document.getElementById('cv-content-container').innerHTML = html;
+
                         } else if (!data.content) {
-                            document.getElementById(containerId).innerHTML = "<p>No CV content has been added yet.</p>";
+                            document.getElementById('cv-content-container').innerHTML = "<div class='text-center p-8 bg-white border border-gray-200 shadow rounded'>No CV content has been published yet. Go to your Admin Dashboard to build your CV!</div>";
+                        } else {
+                            // Render old plain markdown if available
+                            document.getElementById('cv-content-container').innerHTML = `<div class="prose max-w-none shadow-lg p-6 bg-white border border-[var(--border-primary)] rounded-xl">${marked.parse(data.content)}</div>`;
                         }
                     }
                 } catch(e) {
-                    console.error("Error fetching content for " + slug, e);
+                    console.error("Error fetching CV content", e);
                 }
             }
 
-            fetchPageContent('cv', 'cv-content-container');
+            fetchPageContent();
         });
     </script>
 
