@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8F0E3; color: #4A3B31; }
+        .input-style {
+            width: 100%; padding: 0.75rem; border: 1px solid #D1C0AF; border-radius: 0.5rem;
+            background-color: #FFFFFF; font-family: inherit; margin-bottom: 1rem;
+        }
+        .btn-style {
+            background-color: #C08261; color: white; padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem; font-weight: bold; cursor: pointer; border: none;
+        }
+        .btn-style:hover { background-color: #A46A4E; }
+    </style>
+</head>
+<body class="p-8">
+
+    <div id="login-section" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg mt-20">
+        <h2 class="text-2xl font-bold mb-4">Admin Login</h2>
+        <input type="password" id="admin-pwd" class="input-style" placeholder="Enter Password">
+        <button onclick="login()" class="btn-style w-full">Login</button>
+        <p id="login-error" class="text-red-500 mt-2 hidden">Invalid password</p>
+    </div>
+
+    <div id="admin-section" class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">Create New Blog Post</h2>
+            <button onclick="logout()" class="text-sm underline text-[#C08261]">Logout</button>
+        </div>
+        
+        <label class="block font-bold mb-1">Title</label>
+        <input type="text" id="post-title" class="input-style" placeholder="Post Title">
+        
+        <label class="block font-bold mb-1">Date</label>
+        <input type="date" id="post-date" class="input-style">
+        
+        <label class="block font-bold mb-1">Snippet</label>
+        <textarea id="post-snippet" class="input-style h-20" placeholder="A short description of the post..."></textarea>
+        
+        <label class="block font-bold mb-1">Content (Markdown + LaTeX)</label>
+        <textarea id="post-content" class="input-style h-64 font-mono text-sm" placeholder="Write your markdown here...\n\nMathJax is supported: $\\alpha$ or $$\\beta$$"></textarea>
+        
+        <button onclick="publishPost()" class="btn-style w-full mt-4">Publish Post</button>
+        <p id="publish-msg" class="mt-4 font-bold"></p>
+    </div>
+
+    <script>
+        document.getElementById('post-date').valueAsDate = new Date();
+
+        function checkAuth() {
+            if (localStorage.getItem('adminPwd')) {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('admin-section').classList.remove('hidden');
+            }
+        }
+        checkAuth();
+
+        async function login() {
+            const pwd = document.getElementById('admin-pwd').value;
+            const res = await fetch('/api/auth', {
+                method: 'POST',
+                headers: { 'X-Admin-Password': pwd }
+            });
+            if (res.ok) {
+                localStorage.setItem('adminPwd', pwd);
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('admin-section').classList.remove('hidden');
+                document.getElementById('login-error').classList.add('hidden');
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('adminPwd');
+            document.getElementById('admin-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('admin-pwd').value = '';
+        }
+
+        async function publishPost() {
+            const pwd = localStorage.getItem('adminPwd');
+            const data = {
+                title: document.getElementById('post-title').value,
+                date: document.getElementById('post-date').value,
+                snippet: document.getElementById('post-snippet').value,
+                content: document.getElementById('post-content').value
+            };
+
+            const msgEl = document.getElementById('publish-msg');
+            msgEl.textContent = 'Publishing...';
+            msgEl.className = 'mt-4 font-bold text-gray-500';
+
+            const res = await fetch('/api/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Admin-Password': pwd
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                msgEl.textContent = 'Success! Post published.';
+                msgEl.className = 'mt-4 font-bold text-green-600';
+                document.getElementById('post-title').value = '';
+                document.getElementById('post-snippet').value = '';
+                document.getElementById('post-content').value = '';
+            } else {
+                msgEl.textContent = 'Error publishing post. Check password.';
+                msgEl.className = 'mt-4 font-bold text-red-600';
+                if (res.status === 401) logout();
+            }
+        }
+    </script>
+</body>
+</html>

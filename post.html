@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Blog Post | Mohammad Al Baqer Alghezi</title>
+    <meta name="description" content="Blog post by Mohammad Al Baqer Alghezi">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Define color palette using CSS Custom Properties (Variables) */
+        :root {
+            --bg-primary: #F8F0E3;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #4A3B31;
+            --text-secondary: #6F5E53;
+            --border-primary: #D1C0AF;
+            --accent-primary: #C08261;
+            --accent-primary-hover: #A46A4E;
+            --shadow-color: rgba(74, 59, 49, 0.1);
+            --nav-bg: rgba(248, 240, 227, 0.85);
+            /* Prose specific variables for light mode */
+            --prose-body: var(--text-primary);
+            --prose-headings: var(--text-primary);
+            --prose-lead: var(--text-secondary);
+            --prose-links: var(--accent-primary);
+            --prose-bold: var(--text-primary);
+            --prose-counters: var(--text-secondary);
+            --prose-bullets: var(--border-primary);
+            --prose-hr: var(--border-primary);
+            --prose-quotes: var(--text-primary);
+            --prose-quote-borders: var(--border-primary);
+            --prose-captions: var(--text-secondary);
+            --prose-code: var(--accent-primary);
+            --prose-pre-code: var(--text-primary);
+            --prose-pre-bg: var(--border-primary);
+            --prose-th-borders: var(--border-primary);
+            --prose-td-borders: var(--border-primary);
+        }
+
+        .dark:root {
+            --bg-primary: #221E1F;
+            --bg-secondary: #2d2829;
+            --text-primary: #E0D6C7;
+            --text-secondary: #B0A69A;
+            --border-primary: #5A524C;
+            --accent-primary: #D4A187;
+            --accent-primary-hover: #B88A71;
+            --shadow-color: rgba(224, 214, 199, 0.08);
+            --nav-bg: rgba(34, 30, 31, 0.85);
+            /* Prose specific variables for dark mode */
+            --prose-body: var(--text-primary);
+            --prose-headings: var(--text-primary);
+            --prose-lead: var(--text-secondary);
+            --prose-links: var(--accent-primary);
+            --prose-bold: var(--text-primary);
+            --prose-counters: var(--text-secondary);
+            --prose-bullets: var(--border-primary);
+            --prose-hr: var(--border-primary);
+            --prose-quotes: var(--text-primary);
+            --prose-quote-borders: var(--border-primary);
+            --prose-captions: var(--text-secondary);
+            --prose-code: var(--accent-primary);
+            --prose-pre-code: #F8F0E3;
+            --prose-pre-bg: #3a3330;
+            --prose-th-borders: var(--border-primary);
+            --prose-td-borders: var(--border-primary);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .top-nav-container {
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        .prose { color: var(--prose-body); }
+        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 { color: var(--prose-headings); }
+        .prose a { color: var(--prose-links); text-decoration: none; }
+        .prose a:hover { text-decoration: underline; }
+        .prose strong { color: var(--prose-bold); }
+        .prose blockquote { color: var(--prose-quotes); border-left-color: var(--prose-quote-borders); }
+        .prose code { color: var(--prose-code); background-color: var(--prose-pre-bg); padding: 0.2em 0.4em; margin: 0; font-size: 85%; border-radius: 3px; }
+        .prose pre { background-color: var(--prose-pre-bg); color: var(--prose-pre-code); border-radius: 0.375rem; padding: 1rem; overflow-x: auto; }
+        .prose pre code { background-color: transparent; padding: 0; margin: 0; font-size: inherit; border-radius: 0; color: inherit; }
+        .prose hr { border-color: var(--prose-hr); }
+        .prose ul > li::before { background-color: var(--prose-bullets); }
+        .prose ol > li::before { color: var(--prose-counters); }
+
+        .prose mjx-container[display="true"] { margin-top: 1.5em; margin-bottom: 1.5em; }
+    </style>
+</head>
+<body class="font-inter leading-relaxed">
+
+    <div id="navigation-container" class="sticky top-0 z-50 top-nav-container"></div>
+
+    <div class="container mx-auto max-w-6xl px-4 pt-8 md:pt-12 pb-16">
+        <div id="loading" class="text-center font-bold text-xl mb-6">Loading post...</div>
+        <div id="post-content-wrapper" class="hidden"> 
+            <main class="w-full"> 
+                <header class="mb-6 md:mb-8 border-b-2 border-[var(--border-primary)] pb-4">
+                    <h1 id="post-title" class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] mb-3"></h1>
+                    <p class="post-meta">
+                        By <span class="font-semibold text-[var(--text-primary)]">Mohammad Al Baqer Alghezi</span>
+                        on <time id="post-date"></time> 
+                    </p>
+                </header>
+
+                <article class="prose lg:prose-xl" id="post-container"> 
+                </article>
+
+                <div class="mt-12 pt-6 border-t border-[var(--border-primary)]">
+                    <a href="https://baqerghezi.github.io/blog.html" class="text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline transition-colors duration-200">← Back to Blog List</a>
+                </div>
+
+                <footer class="text-center mt-16 pt-8 border-t border-[var(--border-primary)]">
+                    <p class="text-sm text-[var(--text-secondary)]">© 2025 Mohammad Al Baqer Alghezi. All rights reserved.</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function renderNavigation(currentPage) {
+            const navContainer = document.getElementById('navigation-container');
+            if (!navContainer) return;
+            const activeClasses = "ring-2 ring-[var(--accent-primary)]";
+            const inactiveClasses = "hover:text-[var(--accent-primary)] hover:bg-[var(--border-primary)]/20";
+            const navHTML = `
+                <div class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+                    <a href="https://baqerghezi.github.io/index.html" class="text-2xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors">
+                        M. A. Alghezi
+                    </a>
+                    <div class="flex items-center space-x-2 sm:space-x-4">
+                        <a href="https://baqerghezi.github.io/index.html" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'home' ? activeClasses : inactiveClasses}">Home</a>
+                        <a href="https://baqerghezi.github.io/blog.html" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'blog' ? activeClasses : inactiveClasses}">Blog</a>
+                        <a href="https://baqerghezi.github.io/mbgcv.html" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'cv' ? activeClasses : inactiveClasses}">CV</a>
+                        <button id="theme-toggle" type="button" class="p-2 rounded-lg text-[var(--text-primary)] hover:bg-[var(--border-primary)]/30 focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] transition-colors">
+                            <svg id="theme-toggle-dark-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21c3.978 0 7.44-2.03 9.002-5.002Z" /></svg>
+                            <svg id="theme-toggle-light-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-6.364-.386 1.591-1.591M3 12h2.25m.386-6.364 1.591 1.591" /></svg>
+                            <span class="sr-only">Toggle theme</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            navContainer.innerHTML = navHTML;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                 themeToggleBtn.addEventListener('click', () => {
+                    const isCurrentlyDark = document.documentElement.classList.contains('dark');
+                    applyTheme(!isCurrentlyDark);
+                });
+            }
+        }
+
+        function applyTheme(isDark) {
+            const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
+                localStorage.setItem('color-theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+                localStorage.setItem('color-theme', 'light');
+            }
+        }
+
+        function renderMarkdownAndMathJax(mdContent) {
+            const postContainerElement = document.getElementById('post-container');
+            if (typeof marked !== 'undefined') {
+                postContainerElement.innerHTML = marked.parse(mdContent);
+            } else {
+                postContainerElement.innerHTML = "<p>Error: Could not load Markdown parser.</p>";
+                return;
+            }
+            
+            if (typeof window.MathJax !== 'undefined' && window.MathJax.startup && window.MathJax.startup.promise) {
+                window.MathJax.startup.promise.then(() => {
+                    if (typeof window.MathJax.typesetPromise === 'function') {
+                        window.MathJax.typesetPromise([postContainerElement])
+                            .catch((err) => console.error('MathJax typesetPromise error:', err));
+                    }
+                });
+            } else {
+                setTimeout(() => {
+                    if (typeof window.MathJax !== 'undefined' && typeof window.MathJax.typesetPromise === 'function') {
+                        window.MathJax.typesetPromise([postContainerElement]);
+                    }
+                }, 500);
+            }
+        }
+
+        async function fetchAndRenderPost() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            if (!postId) {
+                document.getElementById('loading').innerText = "Error: Invalid post ID";
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/posts/' + postId);
+                if (!response.ok) {
+                    document.getElementById('loading').innerText = "Post not found";
+                    return;
+                }
+                const post = await response.json();
+
+                document.getElementById('post-title').innerText = post.title;
+                document.title = post.title + " | Mohammad Al Baqer Alghezi";
+                
+                const d = new Date(post.date + 'T00:00:00');
+                document.getElementById('post-date').innerText = isNaN(d) ? post.date : d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('post-date').setAttribute('datetime', post.date);
+
+                renderMarkdownAndMathJax(post.content);
+
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('post-content-wrapper').classList.remove('hidden');
+            } catch(e) {
+                document.getElementById('loading').innerText = "Error loading post";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNavigation('blog'); 
+            const preferredTheme = localStorage.getItem('color-theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (preferredTheme === 'dark' || (!preferredTheme && systemPrefersDark)) {
+                applyTheme(true);
+            } else {
+                applyTheme(false);
+            }
+            
+            fetchAndRenderPost(); 
+        });
+    </script>
+</body>
+</html>

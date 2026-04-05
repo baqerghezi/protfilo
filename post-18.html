@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>MWDH Applications | Mohammad Al Baqer Alghezi</title>
+    <meta name="description" content="A blog post discussing MWDH Applications with mathematical derivations.">
+    <link rel="canonical" href="https://baqerghezi.github.io/mwdh-applications.html"> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Define color palette using CSS Custom Properties (Variables) */
+        :root {
+            --bg-primary: #F8F0E3;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #4A3B31;
+            --text-secondary: #6F5E53;
+            --border-primary: #D1C0AF;
+            --accent-primary: #C08261;
+            --accent-primary-hover: #A46A4E;
+            --shadow-color: rgba(74, 59, 49, 0.1);
+            --nav-bg: rgba(248, 240, 227, 0.85);
+            /* Prose specific variables for light mode */
+            --prose-body: var(--text-primary);
+            --prose-headings: var(--text-primary);
+            --prose-lead: var(--text-secondary);
+            --prose-links: var(--accent-primary);
+            --prose-bold: var(--text-primary);
+            --prose-counters: var(--text-secondary);
+            --prose-bullets: var(--border-primary);
+            --prose-hr: var(--border-primary);
+            --prose-quotes: var(--text-primary);
+            --prose-quote-borders: var(--border-primary);
+            --prose-captions: var(--text-secondary);
+            --prose-code: var(--accent-primary); /* Inline code text color */
+            --prose-pre-code: var(--text-primary); /* Code block text color */
+            --prose-pre-bg: var(--border-primary); /* Code block background */
+            --prose-th-borders: var(--border-primary);
+            --prose-td-borders: var(--border-primary);
+        }
+
+        .dark:root {
+            --bg-primary: #221E1F;
+            --bg-secondary: #2d2829;
+            --text-primary: #E0D6C7;
+            --text-secondary: #B0A69A;
+            --border-primary: #5A524C;
+            --accent-primary: #D4A187;
+            --accent-primary-hover: #B88A71;
+            --shadow-color: rgba(224, 214, 199, 0.08);
+            --nav-bg: rgba(34, 30, 31, 0.85);
+            /* Prose specific variables for dark mode */
+            --prose-body: var(--text-primary);
+            --prose-headings: var(--text-primary);
+            --prose-lead: var(--text-secondary);
+            --prose-links: var(--accent-primary);
+            --prose-bold: var(--text-primary);
+            --prose-counters: var(--text-secondary);
+            --prose-bullets: var(--border-primary);
+            --prose-hr: var(--border-primary);
+            --prose-quotes: var(--text-primary);
+            --prose-quote-borders: var(--border-primary);
+            --prose-captions: var(--text-secondary);
+            --prose-code: var(--accent-primary); /* Inline code text color */
+            --prose-pre-code: #F8F0E3; /* Light text on dark code block */
+            --prose-pre-bg: #3a3330; /* Darker background for code blocks */
+            --prose-th-borders: var(--border-primary);
+            --prose-td-borders: var(--border-primary);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .top-nav-container {
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.875rem; /* text-sm */
+        }
+        /* Ensure prose styles use theme variables */
+        .prose {
+            color: var(--prose-body);
+        }
+        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+            color: var(--prose-headings);
+        }
+        .prose a {
+            color: var(--prose-links);
+            text-decoration: none;
+        }
+        .prose a:hover {
+            text-decoration: underline;
+        }
+        .prose strong { color: var(--prose-bold); }
+        .prose blockquote {
+            color: var(--prose-quotes);
+            border-left-color: var(--prose-quote-borders);
+        }
+        .prose code { /* Inline code */
+            color: var(--prose-code);
+            background-color: var(--prose-pre-bg); /* Subtle background for inline code */
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 85%;
+            border-radius: 3px;
+        }
+        .prose pre { /* Code block wrapper */
+            background-color: var(--prose-pre-bg);
+            color: var(--prose-pre-code);
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        .prose pre code { /* Code inside pre, reset some inline styles */
+             background-color: transparent;
+             padding: 0;
+             margin: 0;
+             font-size: inherit;
+             border-radius: 0;
+             color: inherit; /* Inherit from pre */
+        }
+        .prose hr { border-color: var(--prose-hr); }
+        .prose ul > li::before { background-color: var(--prose-bullets); }
+        .prose ol > li::before { color: var(--prose-counters); }
+
+        /* Add margin to MathJax display equations */
+        .prose mjx-container[display="true"] {
+            margin-top: 1.5em; /* Adjust as needed */
+            margin-bottom: 1.5em; /* Adjust as needed */
+        }
+
+        /* Style for iframe to make it responsive */
+        .responsive-iframe-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            margin-top: 1.5em;
+            margin-bottom: 1.5em;
+            border-radius: 0.375rem; /* rounded-md */
+        }
+        .responsive-iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+    </style>
+</head>
+<body class="font-inter leading-relaxed">
+
+    <div id="navigation-container" class="sticky top-0 z-50 top-nav-container">
+        </div>
+
+    <div class="container mx-auto max-w-6xl px-4 pt-8 md:pt-12 pb-16">
+        <div> 
+            <main class="w-full"> <header class="mb-6 md:mb-8 border-b-2 border-[var(--border-primary)] pb-4">
+                    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] mb-3">
+                        MWDH Applications
+                    </h1>
+                    <p class="post-meta">
+                        By <span class="font-semibold text-[var(--text-primary)]">Mohammad Al Baqer Alghezi</span>
+                        on <time datetime="2025-05-29">May 29, 2025</time> 
+                    </p>
+                </header>
+
+                <article class="prose lg:prose-xl" id="post-container"> 
+                    </article>
+
+                <div class="responsive-iframe-container">
+                    <iframe
+                        src="https://www.youtube.com/embed/your-video-id-here" title="YouTube video player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+
+
+                <div class="mt-12 pt-6 border-t border-[var(--border-primary)]">
+                    <a href="https://baqerghezi.github.io/blog.html" class="text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline transition-colors duration-200">← Back to Blog List</a>
+                </div>
+
+                <footer class="text-center mt-16 pt-8 border-t border-[var(--border-primary)]">
+                    <p class="text-sm text-[var(--text-secondary)]">© 2025 Mohammad Al Baqer Alghezi. All rights reserved.</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script id="post-markdown" type="text/markdown">
+1 - 
+The object field modeled as a phase modulated by the vibration in phase $\delta(x,y,t)$  as follows:
+
+$$
+E_o (x,y,t) = |E_o| e^{-j(\omega t + \phi(x,y))}.e^{-j \delta(x,y,t)}
+$$
+
+Where $\omega$ is the temporal frequency and $\delta$  is the vibration term defined as follows:
+$$
+\delta(x,y) = k_0a(x,y) \cos(\omega_0 t)
+$$
+$\omega_0$ is the frequency of the vibration. 
+
+The term $e^{-j\delta(x,y,t)} = e^{-jk_0a(x,y) \cos(\omega_0 t)}$  can be written as a decomposition of orthogonal functions $J_n(x,y,t)$  where $J_n$ is Bessel function of order $n$  as follows:
+
+$$
+ e^{-ja(x,y) \cos(\omega_0 t)} = \sum_{k=-\infty}^{\infty} j^n J_n(k_0 a(x,y))\cos(n\omega_0 t)
+$$
+Therefor the object beam can be written as:
+$$
+E_o (x,y,t) = |E_o| e^{-j(\omega t + \phi(x,y))}.\sum_{k=-\infty}^{\infty} j^n J_n(k_0 a(x,y)))\cos(n\omega_0 t)
+$$
+
+Now the reference beam is written as follows:
+
+$$
+E_r(x,y,t) = |E_r|e^{-j((\omega + n\omega_0)t)}
+$$
+
+Now the interference term  is written as follows:
+$$
+I = |E_o + E_r|^2 = (E_o + E_r)(E_o + E_r)^* = |E_o|^2 + |E_r|^2 + E_oE_r^* + E_o^*E_r 
+$$
+
+$$
+I = DC + |E_r||E_o|( e^{-j(\omega t + \phi(x,y))}.\sum_{k=-\infty}^{\infty} j^k J_k(k_0 a(x,y))cos(k\omega_0 t)  . e^{j((\omega  n\omega_0)t)} \ +  
+$$
+
+$$
+ + e^{j(\omega t + \phi(x,y))}.\sum_{k=-\infty}^{\infty} (-j)^k J_k(k_0 a(x,y)))\cos(k\omega_0 t)  . e^{-j((\omega + n\omega_0)t)})
+$$
+The time average for D.C. term is the same for the corss terms it is as follows:
+
+$$
+<E_oE_r^*> = <E_o^*E_r
+> = 1/2Re(E_oE_r)$$
+$$
+Re(E_oE_r) =|E_r||E_o| Re(e^{j(\omega t + \phi(x,y))}.\sum_{k=-\infty}^{\infty} (j)^k J_k(k_0 a(x,y)))\cos(k\omega_0 t)  . e^{-j((\omega + n\omega_0)t)})
+$$
+Since we are taking the real value we can write $cos$ as exp function to make the computation easier and the term the term $e^{j\omega t}$  will cancel out:
+$$
+= Re(|E_r||E_o| e^{j\phi(x,y))}.\sum_{k=-\infty}^{\infty} (j)^{k} J_{k}(k_0 a(x,y)))e^{jk\omega_0 t}  . e^{-j((n\omega_0)t)})
+$$
+$$
+= Re(|E_r||E_o| e^{j\phi(x,y))}.\sum_{k=-\infty}^{\infty} (j)^{k} J_{k}(k_0 a(x,y))) . e^{-j(((n - k)\omega_0)t)})
+$$
+Now let's take only the terms where $j^k$  is real that is where $k=2l$ $l \in Z$
+
+$$
+Re(|E_r||E_o| e^{j\phi(x,y))}.\sum_{k=-\infty}^{\infty}  J_{k}(k_0 a(x,y))) . e^{-j(((n-k)\omega_0)t + k\pi/2)})
+$$
+The only the term where k=n will result in real values there is $-sin(B)$ for $sin(B)$. The $sin$ function is taken for real values because of the phase shift caused by $j^k$. 
+Hence the time-averaged n-th order observed field is:
+
+$$
+<D.C. + E_oE_r^* +E_o^*E_r>=D.C. + 2(1/2|E_r||E_o| \cos{(\phi(x,y))} .J_{n}(k_0 a(x,y))) ) =
+$$
+$$
+ D.C. + |E_r||E_o| \cos{(\phi(x,y))} .J_{n}(k_0 a(x,y))) ) 
+$$
+The intensity of the field observed by the CCD camera (assuming $\phi(x,y) = constant$ ) is:
+
+$$
+I_n \propto  J^2_{n}(k_0 a(x,y)))
+$$
+
+------
+
+2 . 
+
+The tranciperancy in wet devolved film is given by:
+
+$$
+t(x,y) = t_0 - \beta I_1 
+$$
+For interference pattern:
+
+$$
+I_1 = |R_o|^2 +|O|^2 + R_oO^* + R_o^*O \approx |R_o|^2  + R_oO^* + R_o^*O
+$$
+The reference beam has the highest intensity ($|R|^2 >> |O|^2$). 
+
+$$
+t(x,y) = t_0 - \beta(|R_o|^2 + R_oO^* + R_o^*O )
+$$
+
+Assuming the new object with the deformation is defined
+
+$$
+O' = Oe^{-j\phi(x,y)}
+$$
+where $\phi (x,y) \propto \delta (x,y)$ 
+
+$$
+U = (Oe^{-j\phi} + R_o)t(x,y)
+$$
+$$
+U \approx ((Oe^{-j\phi} + R_o))(t_0 - \beta R_o^2 -\beta(R_oO^* + R_o^*O ))
+$$
+$$
+U \approx R_o(t_o - \beta R_o^2) + (t_0-\beta R_o^2)Oe^{-j\phi} - \beta R^2 O
+$$
+Neglect the term $O.Oe^{-j\phi}$ because it is slower varying with respect to the other interference terms (i.e, $(t_0-\beta R_o^2)Oe^{-j\phi} - \beta R^2 O$ ). The term related to the fringes is: 
+$$
+U_{var} = (t_0-\beta R_o^2)Oe^{-j\phi} - \beta R^2 O = O((t_0-\beta R_o^2)e^{-j\phi} - \beta R^2 )
+$$
+$$
+I_{var} = I_{obj} ((t_0 - \beta R_o^2)^2 -\beta R_0^2(t_0 - \beta R_o^2)e^{-j\phi} -\beta R_0^2(t_0 - \beta R_o^2)e^{j\phi} + \beta^2 R_o^2)
+$$
+where $OO^* = I_{obj}$  
+$$
+I_{var} = I_{obj}((t_0 - \beta R_0^2)^2 - 2\beta R_0^2 (t_o - \beta R_0^2)cos(\phi) + \beta^2R^2))
+$$
+factor out $(\beta R_o^2)^2$ 
+$$
+I_{var} = I_{obj} ((\beta R_o^2)^2) (\frac{(t_0 - \beta R_0^2)^2}{(\beta R_o^2)^2} - 2 \frac{(t_0 - \beta R_0^2)}{(\beta R_o^2)} \cos(\phi) +1)
+$$
+put $I_0 = I_{obj} ((\beta R_o^2)^2)$
+$$
+I_{var} = I_{0} (\frac{(t_0 - \beta R_0^2)^2}{(\beta R_o^2)^2} - 2 \frac{(t_0 - \beta R_0^2)}{(\beta R_o^2)} \cos(\delta) +1)
+$$
+The term related to the interference variation is written in the form above. 
+Because $\phi \propto \delta$  we wrote the previous term in term of $\delta$ .
+
+The contrast has to do with the difference between the peak and the valise of the fringes it is defined as follows:
+
+$$
+C = \frac{I_{max} - I_{min}}{I_{max} + I_{min}}
+$$
+because the term $I_{var}$ has cosine function with negative value that means the peak $I_{max}$ where the cosine term at its minimum where $cos \delta = -1$  on the other hand the vallie $I_{min}$ where $cos \delta = 1$, 
+Therefore the constrast will be:
+
+$$
+C = \frac{I_0(A^2 + 2A + 1 - A^2 +2A-1)}{I_0(A^2 + 2A + 1 + A^2 -2A+1)} = \frac{(  4A )}{(2A^2 + 2)} = \frac{2A}{1 + A^2}
+$$
+Where $A =  \frac{(t_0 - \beta R_0^2)}{(\beta R_o^2)}$  
+
+$$
+C = \frac{2t_0 \beta R_0^2 - \beta^2 R_0^4}{\beta R_0^2 + (t_0 - \beta R_0^2)^2}
+$$
+Where $R_0 \to \infty$  , $C = -1$.   Where $R_0 \to 0$  C=0.  Somewhere in the middle where we maximize the function:
+
+$$f(R_0)  =  \frac{2t_0 \beta R_0^2 - \beta^2 R_0^4}{\beta R_0^2 + (t_0 - \beta R_0^2)^2}$$
+$$
+ \to f'(R_0) = \frac{(4t_0 \beta R_0 - 4\beta^2 R_0^3)((t_0 - \beta R_0^2)^2) - 2t_0 \beta R_0^2 (\beta 2R_0 + 4\beta R_0(t_0-\beta R_0^2))}{(\beta R_0^2 + (t_0 - \beta R_0^2)^2)^2}
+$$
+After finding the derivative of $f$  that will result third degree equation a symbolic calculator is used to solve it: 
+
+$$
+R_{max} = \frac{\sqrt{t_0^{3/2} \sqrt{t_0 + 2} - t_0^2}}{\sqrt{\beta}} 
+$$
+
+At this reference magnitude the maximum contrast can be found. 
+
+
+Using the second derivative test one can find $f''(R_{max}) <0$  which verify it is maximum point.
+
+![](https://placehold.co/600x400/F8F0E3/4A3B31?text=Pasted+image+20250423011605.png)
+
+The conclusion of that that is, the higher the reference will result in better contrast (negative contrast) if it is close to 0 then will get a poor contrast. At some point in the middle there is a maximum point where the positive contrast at its highest. 
+
+
+----
+
+3-
+George paper explains the two-wavelength interferometry (TWH). The advantage of the two-wavelength interferometry that it can be good for  wider range less sensitive setup on the other hand single wavelenth setup works better for less range more sensitive. 
+
+Giving in the interferometer a fringe pattern in (TWH) equivalent to the one obtained if the equivalent wavelength $\Lambda = \frac{\lambda_1\lambda_2}{|\lambda_1 - \lambda_2|}$  
+
+The interferogram recording and reconstruction process introduced in this paper can be surmised as follows:
+
+1 - The object is illuminated with two wavelengths $\lambda_1$ $\lambda_2$ ($O(\lambda_1)O(\lambda_2)$) 
+2 - then the two fields coming from the object is interfered with a reference beams from the two different wavelength ($R(\lambda_1)R(\lambda_2)$)
+3 - the object field and the reference field for the same wavelength will interfere. The two interference patterns will recorded at holographic plate results in a new interference pattern related to the synthetic (equivalent wavelength). As follows:
+
+$$
+\begin{align*}
+t_H \approx I_1 + I_2 = 4 + \exp[-j(W/\lambda_1 - x \sin \theta_1/\lambda_1)] + \exp[-j(-W/\lambda_1 + x \sin \theta_1/\lambda_1)] \\+  \exp[-j(W/\lambda_2 - x \sin \theta_2/\lambda_2)] + \exp[-j(-W/\lambda_2 + x \sin \theta_2/\lambda_2)].
+\end{align*}
+$$
+Where $W$ is the spatial phase pattern.  
+
+The interferogram  reconstruction process introduced in this paper can be surmised as follows:
+
+1 - The hologram is illuminated with the deformed object wave at $\lambda_1$. This generates a diffracted beam. After that the deformed object read by the beam $\lambda_2$ that generates another diffracted beam 
+2- These two beams interfere, creating an interferogram. The resulting interferogram is equivalent to that obtained using a longer, synthetic wavelength ($\Lambda$), which is calculated as $$\Lambda = \frac{\lambda_1\lambda_2}{|\lambda_1 - \lambda_2|}$$because this wavelength is way larger than the two-wavelengths used the interferogram will have larger fringes which increase the range, and solve the wrapping problem, but the measurement will be less sensitive than the indusial wavelength. 
+$$
+\begin{align*}
+A_H(\lambda_2) &= O'(\lambda_2) t_H \\
+&= 4 \exp[-j\pi(W'/\lambda_2)] \\
+&\quad + \exp[-j(W'/\lambda_2 + W/\lambda_1 - x \sin \theta_1/\lambda_1)] \\
+&\quad + \exp[-j\pi(W'/\lambda_2 - W/\lambda_1 + x \sin \theta_1/\lambda_1)] \\
+&\quad + \exp[-j\pi(W'/\lambda_2 + W/\lambda_2 - x \sin \theta_2/\lambda_2)] \\
+&\quad + \exp[-j\pi(W'/\lambda_2 - W/\lambda_2 + x \sin \theta_2/\lambda_2)].
+\end{align*}
+$$
+The following figure from \[Wyant (U. Arizona), 1970]  paper. We can see for the first figure (a) it show single wavelength with $\lambda = 514.5 nm$ interferogram the figure shows that the single wavelength has more fringes allows for better sensitivity. However there is more phase-wrapping and the range of the image is lower than the other three figures. 
+The other three figures (b-d) shows a TWH with increasing synthetic wavelength, as one can see that the higher the synthetic wavelength less wrapping effect but also less sensitivity for the small deformations. 
+
+![](https://placehold.co/600x400/F8F0E3/4A3B31?text=Pasted+image+20250423095928.png)
+
+</script>
+
+    <script>
+        // --- Function to Render Navigation ---
+        function renderNavigation(currentPage) {
+            const navContainer = document.getElementById('navigation-container');
+            if (!navContainer) return;
+
+            const activeClasses = "ring-2 ring-[var(--accent-primary)]";
+            const inactiveClasses = "hover:text-[var(--accent-primary)] hover:bg-[var(--border-primary)]/20";
+            const navHTML = `
+                <div class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+                    <a href="https://baqerghezi.github.io/index.html" class="text-2xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors">
+                        M. A. Alghezi
+                    </a>
+                    <div class="flex items-center space-x-2 sm:space-x-4">
+                        <a href="https://baqerghezi.github.io/index.html" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'home' ? activeClasses : inactiveClasses}">Home</a>
+                        <a href="https://baqerghezi.github.io/blog.html" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'blog' ? activeClasses : inactiveClasses}">Blog</a>
+                        <a href="https://baqerghezi.github.io/mohammadcv.html" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-md text-sm font-medium text-[var(--text-primary)] transition-colors ${currentPage === 'cv' ? activeClasses : inactiveClasses}">CV</a>
+                        <button id="theme-toggle" type="button" class="p-2 rounded-lg text-[var(--text-primary)] hover:bg-[var(--border-primary)]/30 focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] transition-colors">
+                            <svg id="theme-toggle-dark-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21c3.978 0 7.44-2.03 9.002-5.002Z" /></svg>
+                            <svg id="theme-toggle-light-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-6.364-.386 1.591-1.591M3 12h2.25m.386-6.364 1.591 1.591" /></svg>
+                            <span class="sr-only">Toggle theme</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            navContainer.innerHTML = navHTML;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                 themeToggleBtn.addEventListener('click', () => {
+                    const isCurrentlyDark = document.documentElement.classList.contains('dark');
+                    applyTheme(!isCurrentlyDark);
+                });
+            }
+        }
+
+        // --- Theme Toggle Functionality ---
+        function applyTheme(isDark) {
+            const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
+                localStorage.setItem('color-theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+                localStorage.setItem('color-theme', 'light');
+            }
+        }
+
+        // --- Markdown and MathJax Rendering for Blog Post ---
+        function renderBlogPostContent() {
+            const markdownSourceElement = document.getElementById('post-markdown');
+            const postContainerElement = document.getElementById('post-container');
+
+            if (markdownSourceElement && postContainerElement) {
+                const md = markdownSourceElement.textContent.trim();
+                if (typeof marked !== 'undefined') {
+                    postContainerElement.innerHTML = marked.parse(md);
+                } else {
+                    console.error('Marked.js library not loaded.');
+                    postContainerElement.innerHTML = "<p>Error: Could not load Markdown parser.</p>";
+                    return; // Stop if markdown failed
+                }
+                
+                // Wait for MathJax to be ready
+                if (typeof window.MathJax === 'undefined') {
+                    console.error('MathJax global object (window.MathJax) is not available. Script may not have loaded or executed yet.');
+                    return;
+                }
+
+                if (window.MathJax.startup && window.MathJax.startup.promise) {
+                    window.MathJax.startup.promise.then(() => {
+                        console.log("MathJax startup promise resolved. Typesetting.");
+                        if (typeof window.MathJax.typesetPromise === 'function') {
+                            window.MathJax.typesetPromise([postContainerElement])
+                                .catch((err) => console.error('MathJax typesetPromise error:', err));
+                        } else {
+                             console.error("MathJax.typesetPromise function not found after startup.promise resolved.");
+                        }
+                    }).catch((err) => {
+                        console.error("MathJax startup.promise rejected:", err);
+                    });
+                } else {
+                    console.warn("MathJax.startup.promise not available. This is unexpected for MathJax 3. Attempting fallback typesetting with a delay.");
+                    setTimeout(() => {
+                        if (typeof window.MathJax !== 'undefined' && typeof window.MathJax.typesetPromise === 'function') {
+                            console.log("Attempting MathJax.typesetPromise after delay (fallback).");
+                            window.MathJax.typesetPromise([postContainerElement])
+                                .catch((err) => console.error('MathJax typesetPromise error (delayed fallback):', err));
+                        } else if (typeof window.MathJax !== 'undefined' && typeof window.MathJax.typeset === 'function') {
+                             console.log("Attempting MathJax.typeset after delay (further fallback).");
+                             window.MathJax.typeset([postContainerElement]);
+                        } else {
+                            console.error("MathJax or its typesetting functions still not available after delay.");
+                        }
+                    }, 500); 
+                }
+
+            } else {
+                console.error('Markdown source or post container element not found.');
+                if(postContainerElement) {
+                    postContainerElement.innerHTML = "<p>Error: Post content not found.</p>";
+                }
+            }
+        }
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNavigation('blog'); 
+            // renderSidebar(); // Sidebar is removed 
+
+            const preferredTheme = localStorage.getItem('color-theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (preferredTheme === 'dark' || (!preferredTheme && systemPrefersDark)) {
+                applyTheme(true);
+            } else {
+                applyTheme(false);
+            }
+            
+            renderBlogPostContent(); 
+        });
+    </script>
+</body>
+</html>
