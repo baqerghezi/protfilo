@@ -5,3 +5,8 @@ CREATE TABLE IF NOT EXISTS posts (
     snippet TEXT NOT NULL,
     content TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS pages (
+    slug TEXT PRIMARY KEY,
+    content TEXT NOT NULL
+);

@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
 
     <style>
         /* Define color palette using CSS Custom Properties (Variables) */
@@ -118,36 +119,15 @@
             <main class="md:w-[75%] lg:w-[78%]">
                 <section id="about" class="mb-12 md:mb-16 p-6 rounded-xl border border-[var(--border-primary)] bg-[var(--bg-secondary)] shadow-lg">
                     <h2 class="text-2xl md:text-3xl font-bold border-b-2 border-[var(--border-primary)] pb-3 mb-6 text-[var(--text-primary)]">About Me</h2>
-                    <div class="space-y-4 text-[var(--text-secondary)]">
-                        <p>
-TBD                        </p>
+                    <div id="about-content-container" class="prose max-w-none text-[var(--text-secondary)]">
+                        Loading content...
                     </div>
                 </section>
 
                 <section id="projects" class="mb-12 md:mb-16">
                     <h2 class="text-2xl md:text-3xl font-bold border-b-2 border-[var(--border-primary)] pb-3 mb-6 text-[var(--text-primary)]">Projects</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div class="content-card p-6 rounded-xl">
-                            <h3 class="text-xl font-bold mb-2 text-[var(--text-primary)]">Project Title 1</h3>
-                            <p class="text-[var(--text-secondary)] mb-3 text-sm">
-                               Placeholder placeholder placeholder
-                            </p>
-                            <a href="post-project-1.html" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200">View Details &rarr;</a>
-                        </div>
-                        <div class="content-card p-6 rounded-xl">
-                            <h3 class="text-xl font-bold mb-2 text-[var(--text-primary)]">Project Title 2</h3>
-                            <p class="text-[var(--text-secondary)] mb-3 text-sm">
-                                Placeholder placeholder placeholder
-                            </p>
-                             <a href="post-project-2.html" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200">View Details &rarr;</a>
-                        </div>
-                         <div class="content-card p-6 rounded-xl sm:col-span-2 md:col-span-1">
-                            <h3 class="text-xl font-bold mb-2 text-[var(--text-primary)]">Project Title 3</h3>
-                            <p class="text-[var(--text-secondary)] mb-3 text-sm">
-                               Placeholder placeholder placeholder
-                            </p>
-                            <a href="post-project-3.html" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200">View Details &rarr;</a>
-                        </div>
+                    <div id="projects-content-container" class="prose max-w-none">
+                        Loading projects...
                     </div>
                 </section>
 
@@ -304,6 +284,27 @@ TBD                        </p>
             } else {
                 applyTheme(false);
             }
+
+            // Fetch dynamic content
+            async function fetchPageContent(slug, containerId) {
+                try {
+                    const res = await fetch('/api/pages/' + slug);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (typeof marked !== 'undefined' && data.content) {
+                            document.getElementById(containerId).innerHTML = marked.parse(data.content);
+                        } else if (!data.content) {
+                            document.getElementById(containerId).innerHTML = "<p>No content has been added to this section yet.</p>";
+                        }
+                    }
+                } catch(e) {
+                    console.error("Error fetching content for " + slug, e);
+                }
+            }
+
+            fetchPageContent('about', 'about-content-container');
+            fetchPageContent('projects', 'projects-content-container');
+
             // The theme toggle event listener is now added within renderNavigation
             // to ensure it's attached after the button is added to the DOM.
         });

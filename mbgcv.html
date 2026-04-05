@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
 
     <style>
         /* Define color palette using CSS Custom Properties (Variables) */
@@ -128,115 +129,9 @@
 
     <div class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-8 md:pt-12 pb-16">
         <main class="w-full">
-            <section id="cv-header" class="mb-8 text-center">
-                <h1 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-2">Mohammad Al Baqer Alghezi (Baqer)</h1>
-                <p class="text-md text-[var(--text-secondary)] mb-1">(937) 242-2453 | <a href="mailto:baqerghezi@gmail.com" class="text-[var(--accent-primary)] hover:underline">baqerghezi@gmail.com</a> | 
-                    <svg class="location-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.145l.002-.001L10.303 18.72a5.741 5.741 0 00.282-.145l.002-.001.006-.003.018-.008.028-.014a6.018 6.018 0 00.31-.168c.003-.002.005-.003.007-.005l.028-.014c.003-.002.005-.003.008-.005.09-.048.18-.098.267-.152l.004-.002a6.032 6.032 0 00.22-.15l.004-.002.002-.001.002-.002.002-.001a5.99 5.99 0 00.199-.152c.002-.002.004-.003.005-.005A5.986 5.986 0 0012 17.5c0-.999-.224-1.93-.622-2.765A5.982 5.982 0 0010 14c-.999 0-1.93.224-2.765.622A5.983 5.983 0 005.613 17.5c0 .999.224 1.93.622 2.765.002.003.004.004.005.006a5.99 5.99 0 00.199.152l.002.001.002.002.002.001.004.002a6.031 6.031 0 00.22.15l.004.002c.087.054.177.104.267.152.003.002.005.003.008.005l.028.014a6.018 6.018 0 00.31.168l.028.014a5.741 5.741 0 00.281.145l.018.008.006.003zM10 16.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" clip-rule="evenodd" />
-                        <path d="M10 18C6.13401 18 3 14.866 3 11C3 7.13401 6.13401 4 10 4C13.866 4 17 7.13401 17 11C17 14.866 13.866 18 10 18ZM10 11.75C10.4142 11.75 10.75 11.4142 10.75 11C10.75 10.5858 10.4142 10.25 10 10.25C9.58579 10.25 9.25 10.5858 9.25 11C9.25 11.4142 9.58579 11.75 10 11.75Z" />
-                      </svg>
-                    Dayton, Ohio
-                </p>
-                <p class="text-md text-[var(--text-secondary)] mb-4"><a href="https://www.linkedin.com/in/bagerghezi/" target="_blank" rel="noopener noreferrer" class="text-[var(--accent-primary)] hover:underline">linkedin.com/in/bagerghezi/</a></p>
-                <a href="Master Resume MOHAMMAAD BAQER GHEZI TIKTOK.pdf" target="_blank" rel="noopener noreferrer" class="inline-block bg-[var(--accent-primary)] text-white font-bold py-2.5 px-6 rounded-lg transition hover:bg-[var(--accent-primary-hover)] shadow hover:shadow-md text-sm md:text-base">
-                    Read PDF
-                </a>
-            </section>
-
-            <section id="cv-summary" class="content-card">
-                <p class="text-lg text-[var(--text-secondary)]">
-                    A PhD Electro-Optics and Photonics engineering student. Eager to learn and contribute to a dynamic research environment. Seeking an optical engineering summer internship.
-                </p>
-            </section>
-
-            <section id="education" class="content-card">
-                <h2 class="cv-section-title">Education</h2>
-                <div class="mb-6">
-                    <h3 class="cv-item-title">University of Dayton, School of Engineering</h3>
-                    <p class="cv-item-subtitle">Doctor of Philosophy (PhD), Electro-Optics</p>
-                    <p class="cv-item-date">Dayton, OH | Starting 12th 2024</p>
-                    <ul class="list-disc cv-item-details">
-                        <li>Developed simulations for digital holography systems using Python</li>
-                        <li>Developed simulations optical encryption systems</li>
-                        <li>Conducted literature reviews on optical encryption</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="cv-item-title">University of Dayton, School of Engineering</h3>
-                    <p class="cv-item-subtitle">Master of Science (MS), Electro-Optics, GPA: 3.58</p>
-                    <p class="cv-item-date">Dayton, OH | Graduation 12th 2023</p>
-                    <ul class="list-disc cv-item-details">
-                        <li>Relevant Coursework: Introduction to LIDAR, Optical Design (developed an optical telescope optical system), Optical Information Processing (developed MATLAB code for Gaussian beam propagation), Waveguide (designed and simulated asymmetric waveguide using Python), Estimation and Detection (developed MATLAB algorithm for Refractive Index Structure parameter estimation).</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section id="experience" class="content-card">
-                <h2 class="cv-section-title">Research Experience</h2>
-                <div>
-                    <h3 class="cv-item-title">Research Assistant</h3>
-                    <p class="cv-item-subtitle">University of Dayton</p>
-                    <p class="cv-item-date">Dayton, OH | 12th 2021 - 12th 2023</p>
-                    <ul class="list-disc cv-item-details">
-                        <li>Designed a deep learning model to predict the scintillation index in free space optical communication connection.</li>
-                        <li>Developed a Python-based data analysis on experimental data for a free space optical communication channel.</li>
-                        <li>Wrote and published a conference paper and presented the project in "Laser Communication and Propagation through the Atmosphere" SPIE conference.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section id="extracurricular" class="content-card">
-                <h2 class="cv-section-title">Extracurricular Activities</h2>
-                <div>
-                    <h3 class="cv-item-title">SPIE Student Chapter Vice President</h3>
-                    <p class="cv-item-subtitle">Electro-Optics, University of Dayton</p>
-                    <p class="cv-item-date">Dayton, OH | 10th 2022 - 12th 2023</p>
-                    <ul class="list-disc cv-item-details">
-                        <li>Organized different activities involving students from the Electro-Optics department.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section id="projects" class="content-card">
-                <h2 class="cv-section-title">Project Experience</h2>
-                <div>
-                    <h3 class="cv-item-title">Forecasting the Scintillation Index Using Neural Networks</h3>
-                    <p class="cv-item-subtitle">University of Dayton, School of Engineering</p>
-                    <p class="cv-item-date">Dayton, OH | 1st 2024 - 12th 2023 (Note: Dates seem to overlap, please verify from PDF if this is a typo. Assuming it means Jan 2023 - Dec 2023 or similar based on Master's graduation)</p>
-                     <p class="cv-item-date">Corrected: Jan 2023 - Dec 2023 (Based on common project timelines before graduation)</p>
-                    <ul class="list-disc cv-item-details">
-                        <li>Designed a deep learning model to predict the scintillation index in free space optical communication connection.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section id="publications" class="content-card">
-                <h2 class="cv-section-title">Publications</h2>
-                <div class="mb-4">
-                    <p class="cv-item-title text-base">Al Ghezi, Μ. Α. Β. (2023). Forecasting the Scintillation Index Using Neural Networks [Master's thesis, University of Dayton]. OhioLINK Electronic Theses and Dissertations Center.</p>
-                    <a href="http://rave.ohiolink.edu/etdc/view?acc_num=dayton170248927622127" target="_blank" rel="noopener noreferrer" class="text-[var(--accent-primary)] hover:underline text-sm">View Thesis &rarr;</a>
-                </div>
-                <div>
-                    <p class="cv-item-title text-base">Al-Ghezi, M. A., & van lersel, M. (2023). Forecasting the scintillation index using a machine learning approach. In D. T. Wayne, J. A. Anguita, & J. P. Bos (Eds.), Laser Communication and Propagation through the Atmosphere and Oceans XII. SPIE.</p>
-                    <a href="https://doi.org/10.1117/12.2675916" target="_blank" rel="noopener noreferrer" class="text-[var(--accent-primary)] hover:underline text-sm">View Publication (SPIE) &rarr;</a>
-                </div>
-            </section>
-
-            <section id="skills" class="content-card">
-                <h2 class="cv-section-title">Skills</h2>
-                <div class="cv-skills-list">
-                    <span class="cv-skill-tag">MATLAB</span>
-                    <span class="cv-skill-tag">Python</span>
-                    <span class="cv-skill-tag">C++</span>
-                    <span class="cv-skill-tag">LiDAR</span>
-                    <span class="cv-skill-tag">Optical Design</span>
-                    <span class="cv-skill-tag">Waveguide</span>
-                    <span class="cv-skill-tag">Optical Information Processing</span>
-                    <span class="cv-skill-tag">Technical Writing</span>
-                    <span class="cv-skill-tag">Estimation and Detection</span>
-                    <span class="cv-skill-tag">MS OFFICE</span>
-                </div>
-            </section>
+            <div id="cv-content-container" class="prose max-w-none bg-[var(--bg-secondary)] border border-[var(--border-primary)] shadow-lg p-6 rounded-xl text-[var(--text-primary)]">
+                Loading CV...
+            </div>
 
             <footer class="text-center mt-16 pt-8 border-t border-[var(--border-primary)]">
                 <p class="text-sm text-[var(--text-secondary)]">&copy; 2025 Mohammad Al Baqer Alghezi. All rights reserved.</p>
@@ -314,6 +209,25 @@
             } else {
                 applyTheme(false);
             }
+
+            // Fetch dynamic content
+            async function fetchPageContent(slug, containerId) {
+                try {
+                    const res = await fetch('/api/pages/' + slug);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (typeof marked !== 'undefined' && data.content) {
+                            document.getElementById(containerId).innerHTML = marked.parse(data.content);
+                        } else if (!data.content) {
+                            document.getElementById(containerId).innerHTML = "<p>No CV content has been added yet.</p>";
+                        }
+                    }
+                } catch(e) {
+                    console.error("Error fetching content for " + slug, e);
+                }
+            }
+
+            fetchPageContent('cv', 'cv-content-container');
         });
     </script>
 
