@@ -66,7 +66,7 @@
                 
                 <label class="block font-bold mb-1">Title</label>
                 <div class="flex space-x-2 mb-4">
-                    <select id="post-type" class="input-style !mb-0 w-1/3">
+                    <select id="post-type" class="input-style !mb-0 w-1/3" onchange="togglePubUrl()">
                         <option value="">Blog Post</option>
                         <option value="[Project] ">Project</option>
                         <option value="[Publication] ">Publication</option>
@@ -79,6 +79,11 @@
                 
                 <label class="block font-bold mb-1">Snippet</label>
                 <textarea id="post-snippet" class="input-style h-20" placeholder="A short description..."></textarea>
+                
+                <div id="pub-url-container" class="hidden mb-4">
+                    <label class="block font-bold mb-1">External Publication URL (Optional)</label>
+                    <input type="text" id="pub-url" class="input-style !mb-0" placeholder="https://doi.org/...">
+                </div>
                 
                 <div class="flex justify-between items-end mb-1">
                     <label class="block font-bold">Content (Markdown + LaTeX)</label>
@@ -205,6 +210,17 @@
             }
         }
 
+        function togglePubUrl() {
+            const type = document.getElementById('post-type').value;
+            const urlContainer = document.getElementById('pub-url-container');
+            if (type === '[Publication] ') {
+                urlContainer.classList.remove('hidden');
+            } else {
+                urlContainer.classList.add('hidden');
+                document.getElementById('pub-url').value = '';
+            }
+        }
+
         // --- Posts Logic ---
         async function loadPosts() {
             try {
@@ -235,6 +251,8 @@
             document.getElementById('post-type').value = '';
             document.getElementById('post-date').valueAsDate = new Date();
             document.getElementById('post-snippet').value = '';
+            document.getElementById('pub-url').value = '';
+            togglePubUrl();
             document.getElementById('post-content').value = '';
             document.getElementById('post-form-title').innerText = 'Create New Post';
             document.getElementById('post-form-container').classList.remove('hidden');
@@ -295,9 +313,21 @@
                 }
                 document.getElementById('post-type').value = type;
                 document.getElementById('post-title').value = title;
+                togglePubUrl();
                 
                 document.getElementById('post-date').value = post.date;
-                document.getElementById('post-snippet').value = post.snippet;
+                
+                let snippetText = post.snippet;
+                let pubUrl = '';
+                let urlMatch = snippetText.match(/\s*\[URL:(.*?)\]$/);
+                if (urlMatch) {
+                    pubUrl = urlMatch[1];
+                    snippetText = snippetText.replace(urlMatch[0], '');
+                }
+                
+                document.getElementById('post-snippet').value = snippetText;
+                document.getElementById('pub-url').value = pubUrl;
+                
                 document.getElementById('post-content').value = post.content;
                 document.getElementById('post-form-title').innerText = `Editing Post: ${post.title}`;
                 document.getElementById('post-form-container').classList.remove('hidden');
@@ -324,10 +354,18 @@
         async function savePost() {
             const pwd = localStorage.getItem('adminPwd');
             const id = document.getElementById('edit-post-id').value;
+            const typeVal = document.getElementById('post-type').value;
+            let snippetVal = document.getElementById('post-snippet').value;
+            const urlVal = document.getElementById('pub-url').value;
+            
+            if (typeVal === '[Publication] ' && urlVal.trim() !== '') {
+                snippetVal += ` [URL:${urlVal.trim()}]`;
+            }
+
             const data = {
-                title: document.getElementById('post-type').value + document.getElementById('post-title').value,
+                title: typeVal + document.getElementById('post-title').value,
                 date: document.getElementById('post-date').value,
-                snippet: document.getElementById('post-snippet').value,
+                snippet: snippetVal,
                 content: document.getElementById('post-content').value
             };
 

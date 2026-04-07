@@ -313,30 +313,44 @@
 
                     const projectsContainer = document.getElementById('home-projects-container');
                     if (projects.length > 0) {
-                        projectsContainer.innerHTML = projects.map(post => `
+                        projectsContainer.innerHTML = projects.map(post => {
+                            let snippet = post.snippet.replace(/\s*\[URL:(.*?)\]$/, '');
+                            return `
                             <div class="content-card p-6 rounded-xl border border-[var(--border-primary)] bg-[var(--bg-secondary)] shadow-sm hover:shadow-md transition">
                                 <h3 class="text-xl font-bold mb-2">
                                     <a href="/post.html?id=${post.id}" class="text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors">${post.title.substring(10)}</a>
                                 </h3>
                                 <p class="text-sm text-[var(--text-secondary)] mb-3">${new Date(post.date + 'T00:00:00').toLocaleDateString()}</p>
-                                <p class="text-[var(--text-secondary)] line-clamp-3">${post.snippet}</p>
+                                <p class="text-[var(--text-secondary)] line-clamp-3">${snippet}</p>
                                 <a href="/post.html?id=${post.id}" class="mt-3 inline-block text-sm font-semibold text-[var(--accent-primary)] hover:underline">Read More &rarr;</a>
                             </div>
-                        `).join('');
+                            `;
+                        }).join('');
                     } else {
                         projectsContainer.innerHTML = '';
                     }
 
                     const pubContainer = document.getElementById('home-publications-container');
                     if (publications.length > 0) {
-                        pubContainer.innerHTML = publications.map(post => `
+                        pubContainer.innerHTML = publications.map(post => {
+                            let snippet = post.snippet;
+                            let extUrl = '/post.html?id=' + post.id;
+                            let targetAttrs = '';
+                            let urlMatch = snippet.match(/\s*\[URL:(.*?)\]$/);
+                            if (urlMatch) {
+                                extUrl = urlMatch[1];
+                                snippet = snippet.replace(urlMatch[0], '');
+                                targetAttrs = 'target="_blank" rel="noopener noreferrer"';
+                            }
+                            return `
                             <div class="publication-entry">
-                                <p class="publication-title"><a href="/post.html?id=${post.id}" class="text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors">${post.title.substring(14)}</a></p>
+                                <p class="publication-title"><a href="${extUrl}" class="text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors" ${targetAttrs}>${post.title.substring(14)}</a></p>
                                 <p class="publication-authors">${new Date(post.date + 'T00:00:00').toLocaleDateString()}</p>
-                                <div class="publication-venue text-sm opacity-90 mt-2 mb-3 line-clamp-2">${post.snippet}</div>
-                                <a href="/post.html?id=${post.id}" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200">View Publication &rarr;</a>
+                                <div class="publication-venue text-sm opacity-90 mt-2 mb-3 line-clamp-2">${snippet}</div>
+                                <a href="${extUrl}" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200" ${targetAttrs}>View Publication &rarr;</a>
                             </div>
-                        `).join('');
+                            `;
+                        }).join('');
                     } else {
                         pubContainer.innerHTML = '<p class="text-[var(--text-secondary)]">No featured publications yet.</p>';
                     }
