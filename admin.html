@@ -65,7 +65,14 @@
                 <input type="hidden" id="edit-post-id">
                 
                 <label class="block font-bold mb-1">Title</label>
-                <input type="text" id="post-title" class="input-style" placeholder="Post Title">
+                <div class="flex space-x-2 mb-4">
+                    <select id="post-type" class="input-style !mb-0 w-1/3">
+                        <option value="">Blog Post</option>
+                        <option value="[Project] ">Project</option>
+                        <option value="[Publication] ">Publication</option>
+                    </select>
+                    <input type="text" id="post-title" class="input-style !mb-0 w-2/3" placeholder="Post Title">
+                </div>
                 
                 <label class="block font-bold mb-1">Date</label>
                 <input type="date" id="post-date" class="input-style">
@@ -208,7 +215,7 @@
                 list.innerHTML = posts.map(p => `
                     <div class="flex justify-between items-center p-4 bg-[#F8F0E3] rounded-lg border border-[#D1C0AF]">
                         <div>
-                            <p class="font-bold text-lg">${p.title}</p>
+                            <p class="font-bold text-lg">${p.title.replace(/^\[(?:Project|Publication)\]\s*/i, '<span class="text-xs bg-[#C08261] text-white px-2 py-1 rounded mr-2">$&</span>')}</p>
                             <p class="text-sm text-gray-600">${p.date}</p>
                         </div>
                         <div class="space-x-2">
@@ -225,6 +232,7 @@
         function openPostForm() {
             document.getElementById('edit-post-id').value = '';
             document.getElementById('post-title').value = '';
+            document.getElementById('post-type').value = '';
             document.getElementById('post-date').valueAsDate = new Date();
             document.getElementById('post-snippet').value = '';
             document.getElementById('post-content').value = '';
@@ -275,7 +283,19 @@
                 const post = await res.json();
                 
                 document.getElementById('edit-post-id').value = post.id;
-                document.getElementById('post-title').value = post.title;
+                
+                let title = post.title;
+                let type = '';
+                if (title.startsWith('[Project] ')) {
+                    type = '[Project] ';
+                    title = title.substring(10);
+                } else if (title.startsWith('[Publication] ')) {
+                    type = '[Publication] ';
+                    title = title.substring(14);
+                }
+                document.getElementById('post-type').value = type;
+                document.getElementById('post-title').value = title;
+                
                 document.getElementById('post-date').value = post.date;
                 document.getElementById('post-snippet').value = post.snippet;
                 document.getElementById('post-content').value = post.content;
@@ -305,7 +325,7 @@
             const pwd = localStorage.getItem('adminPwd');
             const id = document.getElementById('edit-post-id').value;
             const data = {
-                title: document.getElementById('post-title').value,
+                title: document.getElementById('post-type').value + document.getElementById('post-title').value,
                 date: document.getElementById('post-date').value,
                 snippet: document.getElementById('post-snippet').value,
                 content: document.getElementById('post-content').value

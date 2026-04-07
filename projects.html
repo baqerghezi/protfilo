@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog | Optics & Photonics Insights - Mohammad Al Baqer Alghezi</title>
+    <title>Projects | Mohammad Al Baqer Alghezi</title>
     <meta name="description" content="Explore blog posts by Mohammad Al Baqer Alghezi covering topics in optical engineering, photonics, PhD research, data analysis (Python/MATLAB), and technology trends.">
     <meta name="keywords" content="optics blog, photonics, electro-optics, optical engineering, PhD student, research, MATLAB, Python, data analysis, University of Dayton, Mohammad Al Baqer Alghezi">
     <link rel="canonical" href="https://baqerghezi.github.io/blog.html"> 
@@ -118,7 +118,7 @@
                 </div>
 
             <main class="md:w-[75%] lg:w-[78%]">
-                <h1 class="text-3xl md:text-4xl font-bold border-b-2 border-[var(--border-primary)] pb-4 mb-8 text-[var(--text-primary)]">Optics & Research Blog</h1>
+                <h1 class="text-3xl md:text-4xl font-bold border-b-2 border-[var(--border-primary)] pb-4 mb-8 text-[var(--text-primary)]">Projects</h1>
 
                 <div id="blog-posts-container" class="min-h-[300px] space-y-10">
                     </div>
@@ -359,7 +359,8 @@
                 try {
                     const response = await fetch('/api/posts');
                     if (response.ok) {
-                        blogPosts = await response.json();
+                        const allPosts = await response.json();
+                        blogPosts = allPosts.filter(p => p.title.startsWith('[Project] '));
                         displayBlogPosts(1);
                     } else {
                         document.getElementById('blog-posts-container').innerHTML = '<p class="text-center font-bold text-red-500">Error loading posts from database.</p>';

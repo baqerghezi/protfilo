@@ -243,8 +243,9 @@
                 }
                 const post = await response.json();
 
-                document.getElementById('post-title').innerText = post.title;
-                document.title = post.title + " | Mohammad Al Baqer Alghezi";
+                const cleanTitle = post.title.replace(/^\[(?:Project|Publication)\]\s*/i, '');
+                document.getElementById('post-title').innerText = cleanTitle;
+                document.title = cleanTitle + " | Mohammad Al Baqer Alghezi";
                 
                 const d = new Date(post.date + 'T00:00:00');
                 document.getElementById('post-date').innerText = isNaN(d) ? post.date : d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });

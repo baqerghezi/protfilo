@@ -125,27 +125,23 @@
                 </section>
 
                 <section id="projects" class="mb-12 md:mb-16">
-                    <h2 class="text-2xl md:text-3xl font-bold border-b-2 border-[var(--border-primary)] pb-3 mb-6 text-[var(--text-primary)]">Projects</h2>
+                    <div class="flex justify-between items-end border-b-2 border-[var(--border-primary)] pb-3 mb-6">
+                        <h2 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)]">Projects</h2>
+                        <a href="/projects.html" class="text-sm font-semibold text-[var(--accent-primary)] hover:underline">View All Projects &rarr;</a>
+                    </div>
                     <div id="projects-content-container" class="prose max-w-none">
                         Loading projects...
                     </div>
+                    <div id="home-projects-container" class="mt-8 space-y-6"></div>
                 </section>
 
                 <section id="publications" class="mb-12 md:mb-16">
-                    <h2 class="text-2xl md:text-3xl font-bold border-b-2 border-[var(--border-primary)] pb-3 mb-6 text-[var(--text-primary)]">Featured Publications</h2>
-                    <div class="space-y-6">
-                        <div class="publication-entry">
-                            <p class="publication-title">TBD</p>
-                            <p class="publication-authors">PlaceHolder.</p>
-                            <p class="publication-venue">Placeholder placeholder placeholder</p>
-                            <a href="#" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200" target="_blank" rel="noopener noreferrer">View Publication &rarr;</a>
-                        </div>
-                        <div class="publication-entry">
-                            <p class="publication-title">Placeholder placeholder placeholder</p>
-                            <p class="publication-authors">Placeholder placeholder placeholder</p>
-                            <p class="publication-venue">Placeholder placeholder placeholder</p>
-                            <a href="#" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200" target="_blank" rel="noopener noreferrer">View Publication &rarr;</a>
-                        </div>
+                    <div class="flex justify-between items-end border-b-2 border-[var(--border-primary)] pb-3 mb-6">
+                        <h2 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)]">Featured Publications</h2>
+                        <a href="/publication.html" class="text-sm font-semibold text-[var(--accent-primary)] hover:underline">View All Publications &rarr;</a>
+                    </div>
+                    <div id="home-publications-container" class="space-y-6">
+                        <p class="text-[var(--text-secondary)]">Loading publications...</p>
                     </div>
                 </section>
 
@@ -304,6 +300,52 @@
 
             fetchPageContent('about', 'about-content-container');
             fetchPageContent('projects', 'projects-content-container');
+
+            // Fetch and render featured Projects and Publications from Blog Posts
+            async function fetchFeaturedPosts() {
+                try {
+                    const res = await fetch('/api/posts');
+                    if (!res.ok) return;
+                    const posts = await res.json();
+
+                    const projects = posts.filter(p => p.title.startsWith('[Project] ')).slice(0, 3);
+                    const publications = posts.filter(p => p.title.startsWith('[Publication] ')).slice(0, 3);
+
+                    const projectsContainer = document.getElementById('home-projects-container');
+                    if (projects.length > 0) {
+                        projectsContainer.innerHTML = projects.map(post => `
+                            <div class="content-card p-6 rounded-xl border border-[var(--border-primary)] bg-[var(--bg-secondary)] shadow-sm hover:shadow-md transition">
+                                <h3 class="text-xl font-bold mb-2">
+                                    <a href="/post.html?id=${post.id}" class="text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors">${post.title.substring(10)}</a>
+                                </h3>
+                                <p class="text-sm text-[var(--text-secondary)] mb-3">${new Date(post.date + 'T00:00:00').toLocaleDateString()}</p>
+                                <p class="text-[var(--text-secondary)] line-clamp-3">${post.snippet}</p>
+                                <a href="/post.html?id=${post.id}" class="mt-3 inline-block text-sm font-semibold text-[var(--accent-primary)] hover:underline">Read More &rarr;</a>
+                            </div>
+                        `).join('');
+                    } else {
+                        projectsContainer.innerHTML = '';
+                    }
+
+                    const pubContainer = document.getElementById('home-publications-container');
+                    if (publications.length > 0) {
+                        pubContainer.innerHTML = publications.map(post => `
+                            <div class="publication-entry">
+                                <p class="publication-title"><a href="/post.html?id=${post.id}" class="text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors">${post.title.substring(14)}</a></p>
+                                <p class="publication-authors">${new Date(post.date + 'T00:00:00').toLocaleDateString()}</p>
+                                <div class="publication-venue text-sm opacity-90 mt-2 mb-3 line-clamp-2">${post.snippet}</div>
+                                <a href="/post.html?id=${post.id}" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200">View Publication &rarr;</a>
+                            </div>
+                        `).join('');
+                    } else {
+                        pubContainer.innerHTML = '<p class="text-[var(--text-secondary)]">No featured publications yet.</p>';
+                    }
+                } catch(e) {
+                    console.error("Error fetching featured posts", e);
+                }
+            }
+
+            fetchFeaturedPosts();
 
             // The theme toggle event listener is now added within renderNavigation
             // to ensure it's attached after the button is added to the DOM.
