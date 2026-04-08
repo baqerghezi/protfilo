@@ -7,6 +7,9 @@
     <meta name="description" content="Blog post by Mohammad Al Baqer Alghezi">
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css" rel="stylesheet" />
     <script>
       MathJax = {
         tex: {
@@ -136,18 +139,22 @@
 
         .prose mjx-container[display="true"] { margin-top: 1.5em; margin-bottom: 1.5em; }
 
+        /* Ensure PrismJS Line Numbers padding works properly without Tailwind interfering */
+        .prose pre.line-numbers { padding-left: 3.8em !important; position: relative; }
+        .prose pre.line-numbers .line-numbers-rows { border-right: 1px solid var(--border-primary); padding-left: 10px; }
+
     </style>
 </head>
 <body class="font-inter leading-relaxed">
 
     <div id="navigation-container" class="sticky top-0 z-50 top-nav-container"></div>
 
-    <div class="container mx-auto max-w-7xl px-2 sm:px-4 pt-6 md:pt-10 pb-16">
+    <div class="w-full xl:w-[98vw] max-w-none mx-auto px-[2vw] sm:px-[3vw] pt-[6vh] pb-[10vh]">
         <div id="loading" class="text-center font-bold text-xl mb-6">Loading post...</div>
-        <div id="post-content-wrapper" class="hidden flex justify-center w-full px-2 md:px-0"> 
-            <main class="w-full max-w-6xl bg-[var(--bg-secondary)] shadow-lg rounded-xl p-5 sm:p-8 md:p-12 lg:p-16 border border-[var(--border-primary)] transition-colors duration-300 antialiased mx-auto"> 
-                <header class="mb-10 lg:mb-12 text-center">
-                    <h1 id="post-title" class="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] mb-6 leading-tight tracking-tight max-w-5xl mx-auto"></h1>
+        <div id="post-content-wrapper" class="hidden flex justify-center w-full"> 
+            <main class="w-[98%] sm:w-[96%] md:w-[94%] bg-[var(--bg-secondary)] shadow-lg rounded-xl p-[5vw] md:p-[6vw] lg:p-[8vw] border border-[var(--border-primary)] transition-colors duration-300 antialiased mx-auto"> 
+                <header class="mb-[6vh] text-center">
+                    <h1 id="post-title" class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[var(--text-primary)] mb-[3vh] leading-tight tracking-tight w-[90%] mx-auto"></h1>
                     
                     <div id="post-metadata-container" class="space-y-4">
                         <!-- Populated by JS -->
@@ -244,6 +251,14 @@
 
             if (typeof marked !== 'undefined') {
                 const renderer = new marked.Renderer();
+
+                // Custom Code Renderer to support PrismJS line numbers
+                renderer.code = function(code, language) {
+                    if (!language) language = 'plaintext';
+                    const escapes = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+                    const escape = (html) => String(html).replace(/[&<>"']/g, ch => escapes[ch]);
+                    return `<pre class="line-numbers language-${language}"><code class="language-${language}">${escape(code)}</code></pre>`;
+                };
                 
                 // Custom Image Renderer for wrapping and captions
                 // Example Markdown: ![alt text | caption text #align-left #w-50%](url)
@@ -301,6 +316,11 @@
                 });
                 
                 postContainerElement.innerHTML = htmlContent;
+                
+                // Apply PrismJS Syntax Highlighting
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightAllUnder(postContainerElement);
+                }
             } else {
                 postContainerElement.innerHTML = "<p>Error: Could not load Markdown parser.</p>";
                 return;
@@ -443,5 +463,10 @@
             fetchAndRenderPost(); 
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
 </body>
 </html>
