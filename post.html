@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Blog Post | Mohammad Al Baqer Alghezi</title>
     <meta name="description" content="Blog post by Mohammad Al Baqer Alghezi">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
     <script>
       MathJax = {
@@ -99,6 +99,24 @@
             border-bottom: 1px solid var(--border-primary);
         }
 
+        /* Ensure images, GIFs, and YouTube embeds are flexible */
+        .prose img { 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 0.5rem; 
+        }
+        .prose iframe { 
+            max-width: 100%; 
+            border-radius: 0.5rem; 
+            box-shadow: 0 4px 6px -1px var(--shadow-color);
+        }
+        .prose figcaption {
+            color: var(--prose-captions);
+            font-size: 0.875rem;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
         .post-meta {
             color: var(--text-secondary);
             font-size: 0.875rem;
@@ -118,19 +136,16 @@
 
         .prose mjx-container[display="true"] { margin-top: 1.5em; margin-bottom: 1.5em; }
 
-        /* Ensure images, GIFs, and YouTube embeds are responsive */
-        .prose img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 1.5rem auto; display: block; }
-        .prose iframe { width: 100%; aspect-ratio: 16 / 9; border-radius: 0.5rem; margin: 1.5rem 0; box-shadow: 0 4px 6px -1px var(--shadow-color); }
     </style>
 </head>
 <body class="font-inter leading-relaxed">
 
     <div id="navigation-container" class="sticky top-0 z-50 top-nav-container"></div>
 
-    <div class="container mx-auto max-w-6xl px-4 pt-8 md:pt-12 pb-16">
+    <div class="container mx-auto max-w-6xl px-4 pt-10 md:pt-16 pb-20">
         <div id="loading" class="text-center font-bold text-xl mb-6">Loading post...</div>
-        <div id="post-content-wrapper" class="hidden flex justify-center px-2 md:px-0"> 
-            <main class="w-full max-w-5xl bg-[var(--bg-secondary)] shadow-lg rounded-xl p-6 sm:p-10 md:p-14 lg:p-20 border border-[var(--border-primary)] transition-colors duration-300 antialiased mx-auto"> 
+        <div id="post-content-wrapper" class="hidden flex justify-center px-4 md:px-0"> 
+            <main class="w-full max-w-4xl bg-[var(--bg-secondary)] shadow-lg rounded-xl p-8 sm:p-12 md:p-20 lg:p-28 border border-[var(--border-primary)] transition-colors duration-300 antialiased mx-auto"> 
                 <header class="mb-10 lg:mb-12 text-center">
                     <h1 id="post-title" class="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] mb-6 leading-tight tracking-tight max-w-4xl mx-auto"></h1>
                     
@@ -145,7 +160,7 @@
                     <h2 id="abstract-heading" class="text-3xl font-bold hidden text-[var(--text-primary)]">Abstract</h2>
                 </div>
 
-                <article class="prose !max-w-none text-base md:text-[15px] leading-relaxed prose-p:text-justify prose-img:mx-auto" id="post-container"> 
+                <article class="prose lg:prose-lg xl:prose-xl !max-w-none prose-p:text-justify" id="post-container"> 
                 </article>
 
                 <div class="mt-16 pt-10 border-t border-[var(--border-primary)] flex justify-center">
@@ -213,8 +228,79 @@
 
         function renderMarkdownAndMathJax(mdContent) {
             const postContainerElement = document.getElementById('post-container');
+            
+            // Protect math blocks from Marked.js
+            const mathBlocks = [];
+            let processedMD = mdContent.replace(/\$\$([\s\S]*?)\$\$/g, (match) => {
+                mathBlocks.push(match);
+                return `%%MATH_${mathBlocks.length - 1}%%`;
+            });
+            // Compatible MathJax regex that captures prefix to avoid lookbehinds
+            processedMD = processedMD.replace(/(^|[^\\])\$((?:\\\$|[^$])+?)\$/g, (match, prefix, mathContent) => {
+                const fullMatch = `$${mathContent}$`;
+                mathBlocks.push(fullMatch);
+                return `${prefix}%%MATH_${mathBlocks.length - 1}%%`;
+            });
+
             if (typeof marked !== 'undefined') {
-                postContainerElement.innerHTML = marked.parse(mdContent);
+                const renderer = new marked.Renderer();
+                
+                // Custom Image Renderer for wrapping and captions
+                // Example Markdown: ![alt text | caption text #align-left #w-50%](url)
+                renderer.image = function(href, title, text) {
+                    let alignMatch = text.match(/#align-(left|right|center)/);
+                    let alignClass = "";
+                    let inlineStyle = "";
+                    let imgText = text;
+
+                    if (alignMatch) {
+                        if (alignMatch[1] === 'left') {
+                            alignClass = "float-left mr-6 mb-4";
+                        } else if (alignMatch[1] === 'right') {
+                            alignClass = "float-right ml-6 mb-4";
+                        } else {
+                            alignClass = "mx-auto block";
+                        }
+                        imgText = imgText.replace(alignMatch[0], '').trim();
+                    } else {
+                        alignClass = "mx-auto block"; // default center
+                    }
+
+                    let wMatch = imgText.match(/#w-([0-9]+%|[0-9]+px|[0-9]+)/);
+                    if (wMatch) {
+                        let w = wMatch[1];
+                        if (!w.endsWith('%') && !w.endsWith('px')) w += 'px';
+                        inlineStyle += `width: ${w};`;
+                        imgText = imgText.replace(wMatch[0], '').trim();
+                    }
+
+                    // Treat caption separately if separated by |
+                    let parts = imgText.split('|');
+                    let altText = parts[0].trim();
+                    let caption = parts.length > 1 ? parts[1].trim() : title || altText;
+                    
+                    let captionHtml = "";
+                    if (caption) {
+                        captionHtml = `<figcaption>${caption}</figcaption>`;
+                    }
+                    
+                    return `
+                    <figure class="my-6 ${alignClass}" style="${inlineStyle}">
+                        <img src="${href}" alt="${altText}" title="${title || ''}" class="rounded-lg shadow-sm w-full h-auto">
+                        ${captionHtml}
+                    </figure>`;
+                };
+                
+                // Allow HTML inside Markdown (like wrapped videos)
+                let markedOptions = { renderer: renderer, breaks: true, async: false };
+                let htmlContent = marked.parse(processedMD, markedOptions);
+                
+                // Restore math blocks
+                htmlContent = htmlContent.replace(/%%MATH_(\d+)%%/g, (match, index) => {
+                    return mathBlocks[index];
+                });
+                
+                postContainerElement.innerHTML = htmlContent;
             } else {
                 postContainerElement.innerHTML = "<p>Error: Could not load Markdown parser.</p>";
                 return;
