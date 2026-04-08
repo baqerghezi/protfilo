@@ -143,11 +143,62 @@
         .prose pre.line-numbers { padding-left: 3.8em !important; position: relative; }
         .prose pre.line-numbers .line-numbers-rows { border-right: 1px solid var(--border-primary); padding-left: 10px; }
 
+        @media print {
+            :root, .dark:root {
+                --bg-primary: #FFFFFF !important;
+                --bg-secondary: #FFFFFF !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #333333 !important;
+                --border-primary: #DDDDDD !important;
+                --accent-primary: #000000 !important;
+            }
+            body { 
+                background-color: white !important; 
+                color: black !important; 
+                font-size: 11pt !important;
+                line-height: 1.4 !important;
+            }
+            .prose { 
+                font-size: 11pt !important;
+                line-height: 1.4 !important;
+                max-width: none !important;
+                color: black !important;
+            }
+            main { 
+                box-shadow: none !important; 
+                border: none !important; 
+                padding: 0 !important; 
+                margin: 0 !important; 
+                width: 100% !important; 
+                border-radius: 0 !important;
+            }
+            /* Override tailwind container padding/margins specifically for print */
+            .w-full, .mx-auto.px-\[2vw\], .sm\:px-\[3vw\], .pt-\[6vh\], .pb-\[10vh\] {
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            #post-title { font-size: 24pt !important; margin-bottom: 0.5rem !important; }
+            .prose h1, .prose h2, .prose h3, .prose h4 { break-after: avoid; color: black !important; margin-top: 1.5em !important; margin-bottom: 0.5em !important; }
+            .prose pre, .prose img, .prose blockquote, .prose figure, .h-px { break-inside: avoid; }
+            .prose a { text-decoration: none !important; color: black !important; }
+            .prose pre { 
+                background-color: #f5f5f5 !important; 
+                border: 1px solid #ddd !important; 
+                padding: 10px !important; 
+                white-space: pre-wrap !important; 
+                font-size: 9pt !important; 
+                word-wrap: break-word !important;
+            }
+            .prose code { color: #000 !important; background: transparent !important; }
+            @page { margin: 1.5cm; }
+        }
     </style>
 </head>
 <body class="font-inter leading-relaxed">
 
-    <div id="navigation-container" class="sticky top-0 z-50 top-nav-container"></div>
+    <div id="navigation-container" class="sticky top-0 z-50 top-nav-container print:hidden"></div>
 
     <div class="w-full xl:w-[98vw] max-w-none mx-auto px-[2vw] sm:px-[3vw] pt-[6vh] pb-[10vh]">
         <div id="loading" class="text-center font-bold text-xl mb-6">Loading post...</div>
@@ -170,14 +221,18 @@
                 <article class="prose lg:prose-lg xl:prose-xl !max-w-none prose-p:text-justify" id="post-container"> 
                 </article>
 
-                <div class="mt-16 pt-10 border-t border-[var(--border-primary)] flex justify-center">
+                <div class="mt-16 pt-10 border-t border-[var(--border-primary)] flex flex-wrap justify-center gap-4 print:hidden">
+                    <button onclick="window.print()" class="inline-flex items-center space-x-2 text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-bold hover:underline transition-all duration-200 px-6 py-3 rounded-full bg-[var(--bg-primary)] hover:bg-[var(--border-primary)]/40 shadow-sm border border-[var(--border-primary)]">
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        <span>Print / PDF</span>
+                    </button>
                     <a href="/blog.html" class="inline-flex items-center space-x-2 text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-bold hover:underline transition-all duration-200 px-6 py-3 rounded-full bg-[var(--bg-primary)] hover:bg-[var(--border-primary)]/40 shadow-sm border border-[var(--border-primary)]">
                         <span class="text-xl leading-none">&larr;</span>
                         <span>Back to Articles</span>
                     </a>
                 </div>
 
-                <footer class="text-center mt-16 pt-8 border-t border-[var(--border-primary)]">
+                <footer class="text-center mt-16 pt-8 border-t border-[var(--border-primary)] print:hidden">
                     <p class="text-sm text-[var(--text-secondary)]">© 2025 Mohammad Al Baqer Alghezi. All rights reserved.</p>
                 </footer>
             </main>
