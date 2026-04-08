@@ -88,18 +88,18 @@
                 <div class="flex justify-between items-end mb-1">
                     <label class="block font-bold">Content (Markdown + LaTeX)</label>
                     <div class="space-x-1 flex items-center">
-                        <button type="button" onclick="changeFontSize(-1)" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700" title="Smaller Font">A-</button>
-                        <button type="button" onclick="changeFontSize(1)" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700" title="Larger Font">A+</button>
-                        <span class="text-gray-300">|</span>
                         <button type="button" onclick="insertMarkdown('image')" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700">📷 Add Image/GIF</button>
                         <button type="button" onclick="insertMarkdown('youtube')" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700">🎥 Add YouTube</button>
+                        <span class="text-gray-300">|</span>
+                        <button type="button" onclick="insertMarkdown('resize-text')" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700">A Size</button>
+                        <span class="text-gray-300">|</span>
                         <button type="button" onclick="insertPaperTemplate()" class="text-xs bg-[#C08261] hover:bg-[#A46A4E] text-white px-2 py-1 rounded font-bold shadow-sm">📄 Paper Layout</button>
                     </div>
                 </div>
                 <div class="text-xs text-[#C08261] mb-2 font-medium">
                     <strong>Tip:</strong> Click "📄 Paper Layout" to add frontmatter at the top of your post for authors, venues, and buttons (Code, Data, arXiv, etc.).
                 </div>
-                <textarea id="post-content" class="input-style h-96 font-mono text-xs leading-relaxed transition-all duration-200" placeholder="Write markdown here..." style="font-size: 13px;"></textarea>
+                <textarea id="post-content" class="input-style h-96 font-mono text-sm leading-relaxed transition-all duration-200" placeholder="Write markdown here..."></textarea>
                 
                 <div class="flex space-x-2">
                     <button onclick="savePost()" class="btn-style flex-1">Save Post</button>
@@ -266,37 +266,46 @@
             document.getElementById('post-msg').innerText = '';
         }
 
-        let currentEditorFontSize = 13;
-        function changeFontSize(delta) {
-            currentEditorFontSize += (delta * 2); 
-            if (currentEditorFontSize < 8) currentEditorFontSize = 8;
-            if (currentEditorFontSize > 32) currentEditorFontSize = 32;
-            document.getElementById('post-content').style.fontSize = currentEditorFontSize + 'px';
-        }
-
         function insertMarkdown(type) {
             const textarea = document.getElementById('post-content');
             const startPos = textarea.selectionStart;
             const endPos = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(startPos, endPos);
             let textToInsert = '';
 
             if (type === 'image') {
                 const url = prompt("Enter the URL of the image or GIF:");
                 if (!url) return;
                 const alt = prompt("Enter a description (alt text) for the image:") || "Image";
-                textToInsert = `\n![${alt}](${url})\n`;
+                const width = prompt("Optional: Enter a width (e.g., 500px, 50%). Leave blank for default.");
+                
+                if (width) {
+                    textToInsert = `\n<img src="${url}" alt="${alt}" style="width: ${width}; max-width: 100%; display: block; margin: 0 auto;">\n`;
+                } else {
+                    textToInsert = `\n![${alt}](${url})\n`;
+                }
             } else if (type === 'youtube') {
                 let url = prompt("Enter the YouTube Video URL:");
                 if (!url) return;
-                // Extract video ID safely
                 let videoId = '';
                 try {
                     if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
                     else if (url.includes('v=')) videoId = url.split('v=')[1].split('&')[0];
-                    else videoId = url; // fall back to raw ID
+                    else videoId = url; 
                 } catch(e) { videoId = url; }
                 
-                textToInsert = `\n<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>\n`;
+                const width = prompt("Optional: Enter a width (e.g., 500px, 80%). Leave blank for default responsive width.");
+                let styleAttr = width ? `style="width: ${width}; margin: 0 auto; display: block;"` : 'style="width: 100%;"';
+                
+                textToInsert = `\n<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen ${styleAttr}></iframe>\n`;
+            } else if (type === 'resize-text') {
+                const size = prompt("Enter CSS font size (e.g., 12px, 1.5em, 20px):");
+                if (!size) return;
+                if (!selectedText) {
+                    alert("Please select some text in the editor first!");
+                    return;
+                }
+                textToInsert = `<span style="font-size: ${size};">${selectedText}</span>`;
             }
 
             textarea.value = textarea.value.substring(0, startPos) + textToInsert + textarea.value.substring(endPos, textarea.value.length);
