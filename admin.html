@@ -90,9 +90,13 @@
                     <div class="space-x-1">
                         <button type="button" onclick="insertMarkdown('image')" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700">📷 Add Image/GIF</button>
                         <button type="button" onclick="insertMarkdown('youtube')" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700">🎥 Add YouTube</button>
+                        <button type="button" onclick="insertPaperTemplate()" class="text-xs bg-[#C08261] hover:bg-[#A46A4E] text-white px-2 py-1 rounded font-bold shadow-sm">📄 Paper Layout</button>
                     </div>
                 </div>
-                <textarea id="post-content" class="input-style h-64 font-mono text-sm" placeholder="Write markdown here..."></textarea>
+                <div class="text-xs text-[#C08261] mb-2 font-medium">
+                    <strong>Tip:</strong> Click "📄 Paper Layout" to add frontmatter at the top of your post for authors, venues, and buttons (Code, Data, arXiv, etc.).
+                </div>
+                <textarea id="post-content" class="input-style h-64 font-mono text-sm leading-relaxed" placeholder="Write markdown here..."></textarea>
                 
                 <div class="flex space-x-2">
                     <button onclick="savePost()" class="btn-style flex-1">Save Post</button>
@@ -288,6 +292,27 @@
             textarea.focus();
             const newPos = startPos + textToInsert.length;
             textarea.setSelectionRange(newPos, newPos);
+        }
+
+        function insertPaperTemplate() {
+            const template = `---
+authors: Haowen Zhou*, Shi Zhao*, Yujie Fan, Zhenyu Dong
+affiliations: California Institute of Technology, *Equal contribution
+venue: Nature Communications
+year: 2026
+paper: https://nature.com/...
+arxiv: https://arxiv.org/...
+code: https://github.com/...
+data: https://huggingface.co/...
+supplementary: https://...
+---
+
+`;
+            const textarea = document.getElementById('post-content');
+            textarea.value = template + textarea.value;
+            textarea.focus();
+            textarea.selectionStart = 0;
+            textarea.selectionEnd = template.length;
         }
 
         function closePostForm() {
