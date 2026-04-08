@@ -253,20 +253,28 @@
                 const renderer = new marked.Renderer();
 
                 // Custom Code Renderer to support PrismJS line numbers
-                renderer.code = function(code, language) {
-                    if (!language) language = 'plaintext';
+                renderer.code = function(token, language) {
+                    let codeVal = typeof token === 'object' ? token.text : token;
+                    let langVal = typeof token === 'object' ? token.lang : language;
+                    if (!langVal) langVal = 'plaintext';
                     const escapes = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
                     const escape = (html) => String(html).replace(/[&<>"']/g, ch => escapes[ch]);
-                    return `<pre class="line-numbers language-${language}"><code class="language-${language}">${escape(code)}</code></pre>`;
+                    return `<pre class="line-numbers language-${langVal}"><code class="language-${langVal}">${escape(codeVal)}</code></pre>`;
                 };
                 
                 // Custom Image Renderer for wrapping and captions
                 // Example Markdown: ![alt text | caption text #align-left #w-50%](url)
-                renderer.image = function(href, title, text) {
-                    let alignMatch = text.match(/#align-(left|right|center)/);
+                renderer.image = function(token, title, text) {
+                    let hrefVal = typeof token === 'object' ? token.href : token;
+                    let titleVal = typeof token === 'object' ? token.title : title;
+                    let textVal = typeof token === 'object' ? token.text : text;
+                    titleVal = titleVal || '';
+                    textVal = textVal || '';
+
+                    let alignMatch = textVal.match(/#align-(left|right|center)/);
                     let alignClass = "";
                     let inlineStyle = "";
-                    let imgText = text;
+                    let imgText = textVal;
 
                     if (alignMatch) {
                         if (alignMatch[1] === 'left') {
@@ -292,7 +300,7 @@
                     // Treat caption separately if separated by |
                     let parts = imgText.split('|');
                     let altText = parts[0].trim();
-                    let caption = parts.length > 1 ? parts[1].trim() : title || altText;
+                    let caption = parts.length > 1 ? parts[1].trim() : titleVal || altText;
                     
                     let captionHtml = "";
                     if (caption) {
@@ -301,7 +309,7 @@
                     
                     return `
                     <figure class="my-6 ${alignClass}" style="${inlineStyle}">
-                        <img src="${href}" alt="${altText}" title="${title || ''}" class="rounded-lg shadow-sm w-full h-auto">
+                        <img src="${hrefVal}" alt="${altText}" title="${titleVal || ''}" class="rounded-lg shadow-sm w-full h-auto">
                         ${captionHtml}
                     </figure>`;
                 };
