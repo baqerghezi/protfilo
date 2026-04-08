@@ -87,7 +87,10 @@
                 
                 <div class="flex justify-between items-end mb-1">
                     <label class="block font-bold">Content (Markdown + LaTeX)</label>
-                    <div class="space-x-1">
+                    <div class="space-x-1 flex items-center">
+                        <button type="button" onclick="changeFontSize(-1)" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700" title="Smaller Font">A-</button>
+                        <button type="button" onclick="changeFontSize(1)" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700" title="Larger Font">A+</button>
+                        <span class="text-gray-300">|</span>
                         <button type="button" onclick="insertMarkdown('image')" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700">📷 Add Image/GIF</button>
                         <button type="button" onclick="insertMarkdown('youtube')" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700">🎥 Add YouTube</button>
                         <button type="button" onclick="insertPaperTemplate()" class="text-xs bg-[#C08261] hover:bg-[#A46A4E] text-white px-2 py-1 rounded font-bold shadow-sm">📄 Paper Layout</button>
@@ -96,7 +99,7 @@
                 <div class="text-xs text-[#C08261] mb-2 font-medium">
                     <strong>Tip:</strong> Click "📄 Paper Layout" to add frontmatter at the top of your post for authors, venues, and buttons (Code, Data, arXiv, etc.).
                 </div>
-                <textarea id="post-content" class="input-style h-64 font-mono text-sm leading-relaxed" placeholder="Write markdown here..."></textarea>
+                <textarea id="post-content" class="input-style h-96 font-mono text-xs leading-relaxed transition-all duration-200" placeholder="Write markdown here..." style="font-size: 13px;"></textarea>
                 
                 <div class="flex space-x-2">
                     <button onclick="savePost()" class="btn-style flex-1">Save Post</button>
@@ -261,6 +264,14 @@
             document.getElementById('post-form-title').innerText = 'Create New Post';
             document.getElementById('post-form-container').classList.remove('hidden');
             document.getElementById('post-msg').innerText = '';
+        }
+
+        let currentEditorFontSize = 13;
+        function changeFontSize(delta) {
+            currentEditorFontSize += (delta * 2); 
+            if (currentEditorFontSize < 8) currentEditorFontSize = 8;
+            if (currentEditorFontSize > 32) currentEditorFontSize = 32;
+            document.getElementById('post-content').style.fontSize = currentEditorFontSize + 'px';
         }
 
         function insertMarkdown(type) {
