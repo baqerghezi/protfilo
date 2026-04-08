@@ -334,20 +334,25 @@
                     if (publications.length > 0) {
                         pubContainer.innerHTML = publications.map(post => {
                             let snippet = post.snippet;
-                            let extUrl = '/post.html?id=' + post.id;
-                            let targetAttrs = '';
+                            let internalUrl = '/post.html?id=' + post.id;
+                            let extUrlHtml = '';
+                            
                             let urlMatch = snippet.match(/\s*\[URL:(.*?)\]$/);
                             if (urlMatch) {
-                                extUrl = urlMatch[1];
+                                let extUrl = urlMatch[1];
                                 snippet = snippet.replace(urlMatch[0], '');
-                                targetAttrs = 'target="_blank" rel="noopener noreferrer"';
+                                extUrlHtml = `<a href="${extUrl}" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200" target="_blank" rel="noopener noreferrer">External Publication &rarr;</a>`;
                             }
+                            
                             return `
                             <div class="publication-entry">
-                                <p class="publication-title"><a href="${extUrl}" class="text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors" ${targetAttrs}>${post.title.substring(14)}</a></p>
+                                <p class="publication-title"><a href="${internalUrl}" class="text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors">${post.title.substring(14)}</a></p>
                                 <p class="publication-authors">${new Date(post.date + 'T00:00:00').toLocaleDateString()}</p>
                                 <div class="publication-venue text-sm opacity-90 mt-2 mb-3 line-clamp-2">${snippet}</div>
-                                <a href="${extUrl}" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200" ${targetAttrs}>View Publication &rarr;</a>
+                                <div class="flex flex-wrap gap-4 mt-2">
+                                    <a href="${internalUrl}" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200">Read More &rarr;</a>
+                                    ${extUrlHtml}
+                                </div>
                             </div>
                             `;
                         }).join('');

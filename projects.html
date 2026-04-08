@@ -237,14 +237,14 @@
 
         function generateBlogPostHTML(post) {
             let snippet = post.snippet;
-            let postUrl = `post.html?id=${post.id}`;
-            let targetAttrs = '';
+            let internalUrl = `post.html?id=${post.id}`;
+            let extUrlHtml = '';
             
             let urlMatch = snippet.match(/\s*\[URL:(.*?)\]$/);
             if (urlMatch) {
                 if (post.title.startsWith('[Publication] ')) {
-                    postUrl = urlMatch[1];
-                    targetAttrs = 'target="_blank" rel="noopener noreferrer"';
+                    let extUrl = urlMatch[1];
+                    extUrlHtml = `<a href="${extUrl}" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200" target="_blank" rel="noopener noreferrer">External Publication &rarr;</a>`;
                 }
                 snippet = snippet.replace(urlMatch[0], '');
             }
@@ -252,7 +252,7 @@
             return `
                 <article class="blog-post-entry p-6 rounded-xl">
                     <h2 class="text-2xl font-bold mb-2">
-                        <a href="${postUrl}" class="text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors duration-200" ${targetAttrs}>${post.title.replace(/^\[(?:Project|Publication)\]\s*/i, '')}</a>
+                        <a href="${internalUrl}" class="text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors duration-200">${post.title.replace(/^\[(?:Project|Publication)\]\s*/i, '')}</a>
                     </h2>
                     <p class="blog-post-meta text-sm text-[var(--text-secondary)] mb-3">
                         Published on <time datetime="${post.date}">${new Date(post.date + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
@@ -260,9 +260,12 @@
                     <div class="blog-post-snippet text-[var(--text-secondary)] mb-4">
                         <p>${snippet}</p>
                     </div>
-                    <a href="${postUrl}" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200" aria-label="Read more about ${post.title}" ${targetAttrs}>
-                        Read More &rarr;
-                    </a>
+                    <div class="flex flex-wrap gap-4 mt-2">
+                        <a href="${internalUrl}" class="inline-block text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline text-sm transition-colors duration-200" aria-label="Read more about ${post.title}">
+                            Read More &rarr;
+                        </a>
+                        ${extUrlHtml}
+                    </div>
                 </article>
             `;
         }
