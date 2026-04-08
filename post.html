@@ -129,21 +129,30 @@
 
     <div class="container mx-auto max-w-6xl px-4 pt-8 md:pt-12 pb-16">
         <div id="loading" class="text-center font-bold text-xl mb-6">Loading post...</div>
-        <div id="post-content-wrapper" class="hidden"> 
-            <main class="w-full"> 
-                <header class="mb-6 md:mb-8 border-b-2 border-[var(--border-primary)] pb-4">
-                    <h1 id="post-title" class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] mb-3"></h1>
-                    <p class="post-meta">
-                        By <span class="font-semibold text-[var(--text-primary)]">Mohammad Al Baqer Alghezi</span>
-                        on <time id="post-date"></time> 
-                    </p>
+        <div id="post-content-wrapper" class="hidden flex justify-center px-2 md:px-0"> 
+            <main class="w-full max-w-4xl bg-[var(--bg-secondary)] shadow-xl rounded-2xl p-6 sm:p-10 md:p-16 lg:p-20 border border-[var(--border-primary)] transition-colors duration-300 antialiased"> 
+                <header class="mb-10 lg:mb-14 text-center">
+                    <h1 id="post-title" class="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] mb-6 leading-tight tracking-tight"></h1>
+                    <div class="flex flex-wrap items-center justify-center gap-4 text-sm md:text-base text-[var(--text-secondary)]">
+                        <div class="flex items-center">
+                            <img src="photos/personal_photo.png" alt="Author" class="w-10 h-10 rounded-full border-2 border-[var(--accent-primary)] mr-3 object-cover shadow-sm" onerror="this.onerror=null; this.src='https://placehold.co/112x112/A08C7D/4A3B31?text=M';">
+                            <span class="font-semibold text-[var(--text-primary)] tracking-wide">Mohammad Al Baqer Alghezi</span>
+                        </div>
+                        <span class="hidden md:inline text-[var(--border-primary)]">|</span>
+                        <time id="post-date" class="font-medium tracking-wide"></time> 
+                    </div>
                 </header>
 
-                <article class="prose lg:prose-xl" id="post-container"> 
+                <div class="h-px bg-gradient-to-r from-transparent via-[var(--border-primary)] to-transparent w-full mb-12 opacity-70"></div>
+
+                <article class="prose !max-w-none md:text-lg lg:text-xl leading-loose" id="post-container"> 
                 </article>
 
-                <div class="mt-12 pt-6 border-t border-[var(--border-primary)]">
-                    <a href="/blog.html" class="text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-semibold hover:underline transition-colors duration-200">← Back to Blog List</a>
+                <div class="mt-16 pt-10 border-t border-[var(--border-primary)] flex justify-center">
+                    <a href="/blog.html" class="inline-flex items-center space-x-2 text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-bold hover:underline transition-all duration-200 px-6 py-3 rounded-full bg-[var(--bg-primary)] hover:bg-[var(--border-primary)]/40 shadow-sm border border-[var(--border-primary)]">
+                        <span class="text-xl leading-none">&larr;</span>
+                        <span>Back to Articles</span>
+                    </a>
                 </div>
 
                 <footer class="text-center mt-16 pt-8 border-t border-[var(--border-primary)]">
