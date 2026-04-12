@@ -7,60 +7,162 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F8F0E3; color: #4A3B31; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --bg-primary: #F4F1EC;
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --text-primary: #2D241E;
+            --text-secondary: #5A4A40;
+            --accent-primary: #ab6a4b;
+            --accent-hover: #8C553C;
+            --border-color: rgba(209, 192, 175, 0.6);
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #F8F0E3 0%, #E9DAC1 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px rgba(74, 59, 49, 0.08);
+            border-radius: 1.25rem;
+        }
+
         .input-style {
-            width: 100%; padding: 0.75rem; border: 1px solid #D1C0AF; border-radius: 0.5rem;
-            background-color: #FFFFFF; font-family: inherit; margin-bottom: 1rem;
+            width: 100%; padding: 0.875rem 1rem; 
+            border: 1px solid var(--border-color); 
+            border-radius: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.8); 
+            font-family: inherit; margin-bottom: 1.25rem;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-size: 0.95rem;
+        }
+        .input-style:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(171, 106, 75, 0.15);
+            background-color: #ffffff;
         }
         .btn-style {
-            background-color: #C08261; color: white; padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem; font-weight: bold; cursor: pointer; border: none;
-            transition: background-color 0.2s;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, #9e5b3e 100%); 
+            color: white; 
+            padding: 0.875rem 1.5rem;
+            border-radius: 0.75rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(171, 106, 75, 0.2);
         }
-        .btn-style:hover { background-color: #A46A4E; }
-        .btn-delete { background-color: #e53e3e; }
-        .btn-delete:hover { background-color: #c53030; }
-        .tab-btn { padding: 0.75rem 1rem; cursor: pointer; border-bottom: 2px solid transparent; font-weight: bold; color: #6F5E53; }
-        .tab-btn.active { border-bottom-color: #C08261; color: #C08261; }
-        .tab-content { display: none; }
+        .btn-style:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(171, 106, 75, 0.3);
+        }
+        .btn-style:active {
+            transform: translateY(0);
+        }
+        .btn-delete { 
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%); 
+            box-shadow: 0 4px 6px rgba(229, 62, 62, 0.2);
+        }
+        .btn-delete:hover { 
+            box-shadow: 0 6px 12px rgba(229, 62, 62, 0.3);
+            background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%); 
+        }
+        .tab-btn { 
+            padding: 0.875rem 1.25rem; 
+            cursor: pointer; 
+            border-bottom: 3px solid transparent; 
+            font-weight: 600; 
+            color: var(--text-secondary); 
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .tab-btn:hover {
+            color: var(--accent-primary);
+            background: rgba(171, 106, 75, 0.05);
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .tab-btn.active { 
+            border-bottom-color: var(--accent-primary); 
+            color: var(--accent-primary); 
+        }
+        .tab-content { display: none; animation: fadeIn 0.4s ease-out forwards; }
         .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(171, 106, 75, 0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(171, 106, 75, 0.6); }
+
+        .editor-container {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+        
+        .cv-section-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+        .cv-section-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            background: rgba(255, 255, 255, 0.8);
+        }
     </style>
 </head>
-<body class="p-8">
+<body class="p-4 sm:p-8">
 
     <!-- Login Section -->
-    <div id="login-section" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg mt-20">
-        <h2 class="text-2xl font-bold mb-4">Admin Login</h2>
+    <div id="login-section" class="max-w-md mx-auto glass-panel p-8 mt-20">
+        <h2 class="text-2xl font-bold mb-6 text-center text-[var(--accent-primary)]">Admin Login</h2>
         <input type="password" id="admin-pwd" class="input-style" placeholder="Enter Password">
         <button onclick="login()" class="btn-style w-full">Login</button>
-        <p id="login-error" class="text-red-500 mt-2 hidden">Invalid password</p>
+        <p id="login-error" class="text-red-500 mt-2 hidden text-center font-medium">Invalid password!</p>
     </div>
 
     <!-- Admin Dashboard Section -->
-    <div id="admin-section" class="max-w-5xl mx-auto bg-white p-8 rounded-xl shadow-lg hidden">
-        <div class="flex justify-between items-center mb-6 border-b pb-4 border-[#D1C0AF]">
-            <h2 class="text-3xl font-bold">CMS Dashboard</h2>
-            <button onclick="logout()" class="text-sm underline text-[#C08261]">Logout</button>
+    <div id="admin-section" class="max-w-5xl mx-auto glass-panel p-6 sm:p-10 hidden mb-10">
+        <div class="flex justify-between items-center mb-6 border-b pb-4 border-[var(--border-color)]">
+            <h2 class="text-3xl font-bold text-[var(--accent-primary)] drop-shadow-sm">CMS Dashboard</h2>
+            <button onclick="logout()" class="text-sm font-semibold hover:underline text-[var(--accent-primary)] transition">Logout &rarr;</button>
         </div>
         
         <!-- Tabs -->
-        <div class="flex space-x-4 mb-6 border-b border-[#D1C0AF] overflow-x-auto">
-            <div class="tab-btn active" onclick="switchTab('posts')">Blog Posts</div>
+        <div class="flex space-x-2 mb-8 border-b border-[var(--border-color)] overflow-x-auto pb-1 custom-scrollbar">
+            <div class="tab-btn active" onclick="switchTab('posts')">Blog Posts & Projects</div>
             <div class="tab-btn" onclick="switchTab('cv')">Manage CV</div>
-            <div class="tab-btn" onclick="switchTab('projects')">Manage Projects</div>
             <div class="tab-btn" onclick="switchTab('about')">Manage About Me</div>
         </div>
 
         <!-- 1. Posts Tab -->
         <div id="tab-posts" class="tab-content active">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">All Posts</h3>
-                <button onclick="openPostForm()" class="btn-style">Create New Post</button>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">All Posts</h3>
+                <button onclick="openPostForm()" class="btn-style shadow-lg hover:shadow-xl">+ Create New Post</button>
             </div>
             <div id="posts-list" class="space-y-4 mb-8"></div>
             
             <!-- Post Editor Form (Hidden by default) -->
-            <div id="post-form-container" class="hidden bg-[#F8F0E3] p-6 rounded-lg border border-[#D1C0AF]">
+            <div id="post-form-container" class="hidden editor-container mt-6 shadow-sm">
                 <h3 id="post-form-title" class="text-xl font-bold mb-4">Create / Edit Post</h3>
                 <input type="hidden" id="edit-post-id">
                 
@@ -93,10 +195,10 @@
                         <span class="text-gray-300">|</span>
                         <button type="button" onclick="insertMarkdown('resize-text')" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded font-bold text-gray-700">A Size</button>
                         <span class="text-gray-300">|</span>
-                        <button type="button" onclick="insertPaperTemplate()" class="text-xs bg-[#C08261] hover:bg-[#A46A4E] text-white px-2 py-1 rounded font-bold shadow-sm">📄 Paper Layout</button>
+                        <button type="button" onclick="insertPaperTemplate()" class="text-xs bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white px-2 py-1 rounded font-bold shadow-sm transition">📄 Paper Layout</button>
                     </div>
                 </div>
-                <div class="text-xs text-[#C08261] mb-2 font-medium">
+                <div class="text-xs text-[var(--accent-primary)] mb-2 font-medium">
                     <strong>Tip:</strong> Click "📄 Paper Layout" to add frontmatter at the top of your post for authors, venues, and buttons (Code, Data, arXiv, etc.).
                 </div>
                 <textarea id="post-content" class="input-style h-96 font-mono text-sm leading-relaxed transition-all duration-200" placeholder="Write markdown here..."></textarea>
@@ -111,59 +213,59 @@
 
         <!-- 2. CV Tab -->
         <div id="tab-cv" class="tab-content">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Edit CV (Structured Builder)</h3>
-                <button onclick="saveCvJson()" class="btn-style bg-green-600 hover:bg-green-700">Save CV to live site</button>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Edit CV (Structured Builder)</h3>
+                <button onclick="saveCvJson()" class="btn-style bg-green-600 hover:bg-green-700 shadow-md">Save CV to live site</button>
             </div>
             <p id="msg-cv" class="font-bold text-center text-green-600 mb-4"></p>
 
-            <div class="bg-gray-50 border border-gray-200 p-6 rounded-lg mb-6">
-                <h4 class="text-lg font-bold text-gray-700 mb-3 border-b pb-2">1. Header & Contact Info</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">Full Name</label><input id="cv-name" class="input-style" placeholder="e.g. John Doe"></div>
-                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">Phone</label><input id="cv-phone" class="input-style" placeholder="(123) 456-7890"></div>
-                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">Email</label><input id="cv-email" class="input-style" placeholder="email@example.com"></div>
-                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">Location</label><input id="cv-location" class="input-style" placeholder="City, State"></div>
-                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">LinkedIn URL</label><input id="cv-linkedin" class="input-style" placeholder="linkedin.com/in/username"></div>
-                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1">PDF Resume Link</label><input id="cv-pdf" class="input-style" placeholder="resume.pdf"></div>
+            <div class="cv-section-card p-6 mb-6">
+                <h4 class="text-lg font-bold text-gray-700 mb-4 border-b border-[var(--border-color)] pb-2 flex items-center">
+                    <span class="bg-[var(--accent-primary)] text-white w-6 h-6 inline-flex jutsify-center items-center justify-center rounded-full text-sm mr-2">1</span> Header & Contact Info
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1 tracking-wider">Full Name</label><input id="cv-name" class="input-style" placeholder="e.g. John Doe"></div>
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1 tracking-wider">Phone</label><input id="cv-phone" class="input-style" placeholder="(123) 456-7890"></div>
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1 tracking-wider">Email</label><input id="cv-email" class="input-style" placeholder="email@example.com"></div>
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1 tracking-wider">Location</label><input id="cv-location" class="input-style" placeholder="City, State"></div>
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1 tracking-wider">LinkedIn URL</label><input id="cv-linkedin" class="input-style" placeholder="linkedin.com/in/username"></div>
+                    <div><label class="block font-bold text-xs uppercase text-gray-500 mb-1 tracking-wider">PDF Resume Link</label><input id="cv-pdf" class="input-style" placeholder="resume.pdf"></div>
                 </div>
 
-                <h4 class="text-lg font-bold text-gray-700 mt-6 mb-3 border-b pb-2">2. Professional Summary</h4>
-                <textarea id="cv-summary" class="input-style h-24" placeholder="A brief summary of your qualifications..."></textarea>
+                <h4 class="text-lg font-bold text-gray-700 mt-8 mb-4 border-b border-[var(--border-color)] pb-2 flex items-center">
+                     <span class="bg-[var(--accent-primary)] text-white w-6 h-6 inline-flex jutsify-center items-center justify-center rounded-full text-sm mr-2">2</span> Professional Summary
+                </h4>
+                <textarea id="cv-summary" class="input-style h-28 pt-2" placeholder="A brief summary of your qualifications..."></textarea>
 
-                <h4 class="text-lg font-bold text-gray-700 mt-6 mb-3 border-b pb-2">3. Skills (Tags)</h4>
-                <label class="block font-bold text-xs uppercase text-gray-500 mb-1">Comma separated</label>
+                <h4 class="text-lg font-bold text-gray-700 mt-6 mb-4 border-b border-[var(--border-color)] pb-2 flex items-center">
+                    <span class="bg-[var(--accent-primary)] text-white w-6 h-6 inline-flex jutsify-center items-center justify-center rounded-full text-sm mr-2">3</span> Skills (Tags)
+                </h4>
+                <label class="block font-bold text-xs uppercase text-gray-500 mb-2 tracking-wider">Comma separated</label>
                 <input id="cv-skills" class="input-style" placeholder="Python, JavaScript, Machine Learning, Data Analysis">
             </div>
 
-            <div class="bg-gray-50 border border-gray-200 p-6 rounded-lg">
-                <div class="flex justify-between items-center mb-4 border-b pb-2">
-                    <h4 class="text-lg font-bold text-gray-700">4. Sections (Education, Experience, Projects)</h4>
-                    <button onclick="addCvSection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-bold py-1 px-3 rounded">+ Add New Section</button>
+            <div class="cv-section-card p-6">
+                <div class="flex justify-between items-center mb-6 border-b border-[var(--border-color)] pb-3">
+                    <h4 class="text-lg font-bold text-gray-700 flex items-center">
+                        <span class="bg-[var(--accent-primary)] text-white w-6 h-6 inline-flex jutsify-center items-center justify-center rounded-full text-sm mr-2">4</span> Sections (Education, Experience, Projects)
+                    </h4>
+                    <button onclick="addCvSection()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-bold py-1.5 px-4 rounded-lg shadow-sm transition">+ Add New Section</button>
                 </div>
                 
                 <div id="cv-sections-container" class="space-y-6"></div>
             </div>
             
-            <div class="mt-6 text-right">
-                <button onclick="saveCvJson()" class="btn-style bg-green-600 hover:bg-green-700 text-lg px-8 py-3 w-full">💾 Save Full CV to Database</button>
+            <div class="mt-8 text-right">
+                <button onclick="saveCvJson()" class="btn-style bg-green-600 hover:bg-green-700 text-lg px-8 py-3 w-full shadow-lg">💾 Save Full CV to Database</button>
             </div>
         </div>
 
-        <!-- 3. Projects Tab -->
-        <div id="tab-projects" class="tab-content">
-            <h3 class="text-xl font-bold mb-4">Edit Projects Portfolio (Markdown/HTML)</h3>
-            <textarea id="projects-content" class="input-style h-96 font-mono text-sm" placeholder="Write your projects here..."></textarea>
-            <button onclick="savePage('projects')" class="btn-style w-full">Save Projects</button>
-            <p id="msg-projects" class="mt-2 font-bold text-center"></p>
-        </div>
-
-        <!-- 4. About Me Tab -->
+        <!-- 3. About Me Tab -->
         <div id="tab-about" class="tab-content">
-            <h3 class="text-xl font-bold mb-4">Edit About Me Section (Markdown/HTML)</h3>
-            <textarea id="about-content" class="input-style h-64 font-mono text-sm" placeholder="Write your bio here..."></textarea>
-            <button onclick="savePage('about')" class="btn-style w-full">Save About Me</button>
-            <p id="msg-about" class="mt-2 font-bold text-center"></p>
+            <h3 class="text-2xl font-bold mb-6">Edit About Me Section (Markdown/HTML)</h3>
+            <textarea id="about-content" class="input-style h-80 font-mono text-sm" placeholder="Write your bio here..."></textarea>
+            <button onclick="savePage('about')" class="btn-style w-full shadow-md text-lg py-3 mt-2">Save About Me</button>
+            <p id="msg-about" class="mt-4 font-bold text-center"></p>
         </div>
 
     </div>
@@ -212,7 +314,7 @@
             event.target.classList.add('active');
             document.getElementById(`tab-${tabId}`).classList.add('active');
 
-            if(tabId === 'cv' || tabId === 'projects' || tabId === 'about') {
+            if(tabId === 'cv' || tabId === 'about') {
                 loadPage(tabId);
             }
         }
@@ -236,13 +338,13 @@
                 const posts = await res.json();
                 const list = document.getElementById('posts-list');
                 list.innerHTML = posts.map(p => `
-                    <div class="flex justify-between items-center p-4 bg-[#F8F0E3] rounded-lg border border-[#D1C0AF]">
+                    <div class="flex justify-between items-center p-4 cv-section-card mb-3">
                         <div>
-                            <p class="font-bold text-lg">${p.title.replace(/^\[(?:Project|Publication)\]\s*/i, '<span class="text-xs bg-[#C08261] text-white px-2 py-1 rounded mr-2">$&</span>')}</p>
-                            <p class="text-sm text-gray-600">${p.date}</p>
+                            <p class="font-bold text-lg">${p.title.replace(/^\[(?:Project|Publication)\]\s*/i, '<span class="text-xs bg-[var(--accent-primary)] text-white px-2 py-1 rounded mr-2 uppercase tracking-wider">$&</span>')}</p>
+                            <p class="text-sm text-gray-500 font-medium">${p.date}</p>
                         </div>
                         <div class="space-x-2">
-                            <button onclick="editPost(${p.id})" class="btn-style text-sm px-3 py-1">Edit</button>
+                            <button onclick="editPost(${p.id})" class="text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-lg transition shadow-sm">Edit</button>
                             <button onclick="deletePost(${p.id})" class="btn-style btn-delete text-sm px-3 py-1">Delete</button>
                         </div>
                     </div>
@@ -534,14 +636,14 @@ supplementary: https://...
                 });
 
                 container.insertAdjacentHTML('beforeend', `
-                    <div class="bg-gray-100 p-5 rounded-lg border border-gray-300 border-l-4 border-l-[#C08261]">
+                    <div class="bg-[rgba(255,255,255,0.7)] p-5 rounded-lg border border-[var(--border-color)] border-l-4 border-l-[var(--accent-primary)] shadow-sm">
                         <div class="flex justify-between items-center mb-3">
                             <input type="text" placeholder="Section Title (e.g. Education, Experience)" class="input-style mb-0 font-bold text-lg w-2/3" value="${sec.title}" onchange="currentCvData.sections[${sIdx}].title=this.value">
-                            <button onclick="deleteCvSection(${sIdx})" class="text-red-600 font-bold text-sm hover:underline">Delete Section</button>
+                            <button onclick="deleteCvSection(${sIdx})" class="text-red-600 font-bold text-sm hover:underline transition">Delete Section</button>
                         </div>
-                        <div class="pl-4 border-l-2 border-gray-200">
+                        <div class="pl-4 border-l-2 border-[var(--border-color)] pt-2">
                             ${itemsHtml}
-                            <button onclick="addCvItem(${sIdx})" class="text-[#C08261] font-bold text-sm hover:underline">+ Add Entry to this Section</button>
+                            <button onclick="addCvItem(${sIdx})" class="text-[var(--accent-primary)] font-bold text-sm hover:underline transition">+ Add Entry to this Section</button>
                         </div>
                     </div>
                 `);
